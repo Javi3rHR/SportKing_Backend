@@ -8,5 +8,6 @@ import project.Users.entities.User;
 public interface UserRepository extends CrudRepository<User, Long> {
     User findByUsername(String username);
     boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }
 
