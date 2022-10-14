@@ -1,8 +1,10 @@
 INSERT INTO role (description, name) VALUES ('Admin role', 'ADMIN');
 INSERT INTO role (description, name) VALUES ('User role', 'USER');
 
-INSERT INTO users(username, email, password) values ('user1', 'user2@user.com', '$2a$10$hjdjJ/M3YF.6h7fIo8PJUOjy34yMt1rF.Y3rhwAt9zJ909vXdCCu.');
+-- password -> user123
+INSERT INTO users(username, email, password) values ('user1', 'user1@user.com', '$2a$10$WpjF2PY7ihbyxESmxrjqgu.N5lsjuUAv.nE9uQQ4Za/OB.VSnx1Xe');
 INSERT INTO user_roles(user_id, role_id) values (1, 3);
 
-INSERT INTO users(username, email, password) values ('user2', 'user2@admin.com', '$2a$10$hjdjJ/M3YF.6h7fIo8PJUOjy34yMt1rF.Y3rhwAt9zJ909vXdCCu.');
+-- password -> admin123
+INSERT INTO users(username, email, password) values ('admin', 'admin@admin.com', '$2a$10$8b8PO4ElYf3CKhuSSSYXMekiFAievM0mwptaCqpS8euJyV7K4zQhi');
 INSERT INTO user_roles(user_id, role_id) values (2, 1);
