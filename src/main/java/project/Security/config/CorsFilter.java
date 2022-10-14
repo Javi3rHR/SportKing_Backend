@@ -4,7 +4,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/* CORS de toda la app */
+/**
+ * Configuracion global de CORS para toda la aplicacion
+ * Prohibir que se acceda al backend desde determinados dominios. Solo desde donde nosotros queremos.
+ */
 public class CorsFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

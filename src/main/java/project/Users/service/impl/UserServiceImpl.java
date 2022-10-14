@@ -11,6 +11,7 @@ import project.Users.dto.UserDto;
 import project.Users.entities.Role;
 import project.Users.entities.User;
 import project.Users.exception.EmailAlreadyExistsException;
+import project.Users.exception.UsernameAlreadyExistsException;
 import project.Users.repository.UserRepository;
 import project.Users.service.RoleService;
 import project.Users.service.UserService;
@@ -40,11 +41,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
     }
 
+    /* Encargado de cargar los roles. Crea un conjunto de authorities/roles */
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-        });
+        }); ; // Se pone "ROLE_" para que Spring lo detecte bien
         return authorities;
     }
 
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.findByUsername(username);
     }
 
+    /* Comprueba que Username y Email están libres y crea la cuenta */
     @Override
     public User save(UserDto user) {
 
@@ -67,8 +70,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(userRepository.existsByEmail(nUser.getEmail()))
             throw new EmailAlreadyExistsException("Email ocupado");
 
+        if(userRepository.existsByUsername(nUser.getUsername()))
+            throw new UsernameAlreadyExistsException("Username ocupado");
+
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 
+        // Asigna el rol de usuario
         Role role = roleService.findByName("USER");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);

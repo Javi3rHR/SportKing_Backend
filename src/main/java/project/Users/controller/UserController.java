@@ -34,9 +34,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    /* Recibe un objeto LoginUser con solo User y Password y retorna token si sale bien. */
     @PostMapping("/authenticate")
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
+        // Se pasa user y password para que Spring se encargue del auth
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
@@ -48,11 +50,8 @@ public class UserController {
         return ResponseEntity.ok(new AuthToken(token));
     }
 
-    // @RequestMapping(value="/register", method = RequestMethod.POST)
     @PostMapping("/register")
     public User saveUser(@RequestBody UserDto user){
-        // prueba a lanzar excepción customizada
-        // throw new EmailAlreadyExistsException("Email ocupado");
         return userService.save(user);
     }
 

@@ -19,7 +19,9 @@ import project.Security.jwt.JwtAuthFilter;
 
 import javax.annotation.Resource;
 
-
+/**
+ * Clase para la configuración de seguridad Spring Security
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -39,11 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
-//    @Bean
-//    public CustomAccessDeniedHandler accessDeniedHandler(){
-//        return new CustomAccessDeniedHandler();
-//    }
-
+    /* Sobreescribir funcionalidad por defecto de Spring Security */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -61,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /* Creación de Beans */
     @Bean
     public BCryptPasswordEncoder encoder(){
         return new BCryptPasswordEncoder();

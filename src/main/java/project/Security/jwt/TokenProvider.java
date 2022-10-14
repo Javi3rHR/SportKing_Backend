@@ -16,6 +16,9 @@ import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Métodos para generar y validar los token JWT
+ */
 @Component
 public class TokenProvider implements Serializable {
 
