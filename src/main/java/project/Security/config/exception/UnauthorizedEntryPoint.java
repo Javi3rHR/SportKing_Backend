@@ -1,4 +1,4 @@
-package project.security.config.exception;
+package project.Security.config.exception;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package project.security.config;
+package project.Security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +13,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import project.security.config.exception.CustomAccessDeniedHandler;
-import project.security.config.exception.UnauthorizedEntryPoint;
-import project.security.jwt.JwtAuthFilter;
+import project.Security.config.exception.CustomAccessDeniedHandler;
+import project.Security.config.exception.UnauthorizedEntryPoint;
+import project.Security.jwt.JwtAuthFilter;
 
 import javax.annotation.Resource;
 
-/* Clase para la configuración de seguridad Spring Security */
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -34,31 +34,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
 
-    /* CREACIÓN DE BEANS */
-
-    @Bean
-    public BCryptPasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+//    @Bean
+//    public CustomAccessDeniedHandler accessDeniedHandler(){
+//        return new CustomAccessDeniedHandler();
+//    }
 
-    @Bean
-    public JwtAuthFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthFilter();
-    }
-
-
-    /* Sobreescribir configuración por defecto */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -75,4 +60,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
     }
+
+    @Bean
+    public BCryptPasswordEncoder encoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public JwtAuthFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtAuthFilter();
+    }
+
 }

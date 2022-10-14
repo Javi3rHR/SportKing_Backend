@@ -1,4 +1,4 @@
-package project.security.config;
+package project.Security.config;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
