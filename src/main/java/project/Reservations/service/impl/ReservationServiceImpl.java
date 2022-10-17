@@ -25,11 +25,11 @@ public class ReservationServiceImpl implements ReservationService {
         return list;
     }
 
-//    @Override
-//    public List<Reservation> findAllByUserId(Long user_id) {
-//        List<Reservation> list = new ArrayList<>();
-//        reservationRepository.findAllByUserId(user_id).iterator().forEachRemaining(list::add);
-//        return list;
-//    }
+    @Override
+    public List<Reservation> findAllByUserId(Long user_id) {
+        List<Reservation> list = new ArrayList<>();
+        reservationRepository.findAllByUserId(user_id).iterator().forEachRemaining(list::add);
+        return list;
+    }
 
 }

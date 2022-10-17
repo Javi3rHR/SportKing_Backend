@@ -18,7 +18,7 @@ public class Reservation {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long reservation_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
