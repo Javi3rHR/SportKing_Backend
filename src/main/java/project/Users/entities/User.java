@@ -8,6 +8,7 @@ import lombok.ToString;
 import project.Reservations.entities.PlayerLevel;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,7 +41,7 @@ public class User {
 
     @Column(unique = true, length = 50)
     @NotNull @NotBlank(message = "Email is mandatory")
-    @Size(max = 50, message = "Email must be less than 50 characters")
+    @Email(message = "Email must be valid")
     private String email;
 
     @Column(length = 50)
