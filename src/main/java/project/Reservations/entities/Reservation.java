@@ -16,7 +16,8 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long reservation_id;
+    @Column(name = "reservation_id")
+    private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference

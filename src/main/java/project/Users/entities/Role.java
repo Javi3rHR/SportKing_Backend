@@ -12,9 +12,9 @@ public class Role {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long role_id;
 
-    @Column
+    @Column(length = 20)
     private String name;
 
-    @Column
+    @Column(length = 50)
     private String description;
 }

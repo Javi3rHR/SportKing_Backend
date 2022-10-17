@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "court")
@@ -12,7 +13,8 @@ import javax.persistence.*;
 public class Court {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long court_id;
+    @Column(name = "court_id")
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
@@ -22,7 +24,8 @@ public class Court {
     @Column
     private String time_interval;
 
-    @Column(name = "court_name")
+    @Column(name = "court_name", length = 50)
+    @Size(max = 50, message = "Max length is 50")
     private String name;
 
     @Column(name = "court_price")

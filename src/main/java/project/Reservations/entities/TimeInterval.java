@@ -13,7 +13,8 @@ public class TimeInterval {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long time_interval_id;
+    @Column(name = "time_interval_id")
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "court_id")

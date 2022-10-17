@@ -7,6 +7,7 @@ import lombok.ToString;
 import project.Users.entities.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class UserGame {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long user_game_id;
+    @Column(name = "user_game_id")
+    private long id;
 
     @ManyToOne
     @JsonBackReference
@@ -27,15 +29,19 @@ public class UserGame {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "sport_id")
+    @Column(length = 50)
     private Sport sport;
 
     @Column
+    @Size(max = 244, message = "Max length is 244")
     private String annotation;
 
     @Column
+    @Size(max = 244, message = "Max length is 244")
     private String result;
 
     @Column
+    @Size(max = 244, message = "Max length is 244")
     private String opponents;
 
 }

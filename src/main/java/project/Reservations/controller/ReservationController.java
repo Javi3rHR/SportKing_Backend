@@ -27,7 +27,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{user_id}")
+    @GetMapping("/user/{user_id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable Long user_id){
         return new ResponseEntity<>(reservationService.findAllByUserId(user_id), HttpStatus.OK);
