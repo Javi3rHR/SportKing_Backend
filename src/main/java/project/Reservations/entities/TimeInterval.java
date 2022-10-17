@@ -19,6 +19,7 @@ public class TimeInterval {
     @JoinColumn(name = "court_id")
     private Court court;
 
+    /* 9:00 - 10:30 */
     @Column
     private String start_time;
 

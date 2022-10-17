@@ -3,28 +3,36 @@ package project.Reservations.entities;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import project.Users.entities.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "court")
+@Table(name = "user_game")
 @Getter @Setter @ToString
-public class Court {
+public class UserGame {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long court_id;
+    private long user_game_id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
     private Sport sport;
 
-    /* Horario de apertura y de cerrada general Ej. 9:00 - 23:00 */
     @Column
-    private String time_interval;
+    private String annotation;
 
     @Column
-    private String name;
+    private String result;
 
     @Column
-    private double price;
+    private String opponents;
+
 }
