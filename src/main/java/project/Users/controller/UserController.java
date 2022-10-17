@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import project.Security.jwt.TokenProvider;
-import project.Users.dto.AuthToken;
+import project.Security.jwt.AuthTokenDto;
 import project.Users.dto.LoginUser;
 import project.Users.dto.UserDto;
 import project.Users.entities.User;
@@ -47,7 +47,7 @@ public class UserController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        return ResponseEntity.ok(new AuthTokenDto(token));
     }
 
     @PostMapping("/register")

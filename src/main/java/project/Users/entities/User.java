@@ -16,10 +16,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long id;
+    private long user_id;
 
     @Column
     private String username;
+
+    @Column
+    private String name;
 
     @Column
     @JsonIgnore
@@ -32,7 +35,10 @@ public class User {
     private String phone;
 
     @Column
-    private String name;
+    private String credit_card;
+
+    @Column
+    private String image;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLES",

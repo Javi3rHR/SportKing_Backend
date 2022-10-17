@@ -1,20 +1,26 @@
-package project.Users.entities;
+package project.Reservations.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
-public class Role {
+@Table(name = "sport")
+@Getter @Setter @ToString
+public class Sport {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long role_id;
+    private long sport_id;
 
     @Column
     private String name;
 
     @Column
     private String description;
+
+    @Column
+    private String photo;
 }

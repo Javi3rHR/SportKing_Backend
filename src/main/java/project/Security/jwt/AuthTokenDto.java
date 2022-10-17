@@ -1,12 +1,12 @@
-package project.Users.dto;
+package project.Security.jwt;
 
-public class AuthToken {
+public class AuthTokenDto {
 
     private String token;
 
-    public AuthToken(){}
+    public AuthTokenDto(){}
 
-    public AuthToken(String token){
+    public AuthTokenDto(String token){
         this.token = token;
     }
 
