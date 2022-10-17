@@ -1,5 +1,7 @@
 package project.Reservations.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,18 +19,20 @@ public class Reservation {
     private long reservation_id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "court_id")
+    @JoinColumn(name = "court_id", referencedColumnName = "court_id")
     private Court court;
 
     @OneToOne
-    @JoinColumn(name = "time_interval_id")
+    @JoinColumn(name = "time_interval_id", referencedColumnName = "time_interval_id")
     private TimeInterval time_interval;
 
-    @Column
+    @Column(name = "reservation_date")
+    @JsonFormat(pattern="YYYY-MM-dd")
     private String date;
 
     @Column

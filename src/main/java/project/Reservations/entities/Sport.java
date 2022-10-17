@@ -15,12 +15,12 @@ public class Sport {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long sport_id;
 
-    @Column
+    @Column(name = "sport_name")
     private String name;
 
-    @Column
+    @Column(name = "sport_description")
     private String description;
 
-    @Column
+    @Column(name = "sport_photo")
     private String photo;
 }

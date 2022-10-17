@@ -1,5 +1,6 @@
 package project.Reservations.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,10 +20,12 @@ public class UserGame {
     private long user_game_id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "sport_id")
     private Sport sport;
 

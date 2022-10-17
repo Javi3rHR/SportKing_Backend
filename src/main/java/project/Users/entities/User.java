@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import project.Reservations.entities.PlayerLevel;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -40,8 +41,11 @@ public class User {
     @Column
     private String image;
 
+    @Enumerated(EnumType.STRING)
+    private PlayerLevel playerLevel;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES",
+    @JoinTable(name = "USER_ROLE",
             joinColumns = {
                     @JoinColumn(name = "USER_ID")
             },

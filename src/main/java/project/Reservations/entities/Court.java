@@ -22,9 +22,9 @@ public class Court {
     @Column
     private String time_interval;
 
-    @Column
+    @Column(name = "court_name")
     private String name;
 
-    @Column
+    @Column(name = "court_price")
     private double price;
 }
