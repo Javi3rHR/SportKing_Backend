@@ -16,10 +16,7 @@ import project.Users.repository.UserRepository;
 import project.Users.service.RoleService;
 import project.Users.service.UserService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -123,5 +120,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
+    @Override
+    public boolean existsById(Long user_id) {
+        return userRepository.existsById(user_id);
+    }
+
+    @Override
+    public Optional<User> findById(Long user_id) {
+        return userRepository.findById(user_id);
+    }
 
 }
