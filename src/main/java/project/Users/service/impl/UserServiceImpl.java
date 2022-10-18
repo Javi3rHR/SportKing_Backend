@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
+    /* ########## AUTH ########## */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -49,17 +50,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         });
         ; // Se pone "ROLE_" para que Spring lo detecte bien
         return authorities;
-    }
-
-    public List<User> findAll() {
-        List<User> list = new ArrayList<>();
-        userRepository.findAll().iterator().forEachRemaining(list::add);
-        return list;
-    }
-
-    @Override
-    public User findOne(String username) {
-        return userRepository.findByUsername(username);
     }
 
     /* Comprueba que Username y Email están libres y crea la cuenta */
@@ -90,20 +80,28 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.save(nUser);
     }
 
+
+    /* ########## CRUD ########## */
+
+    public List<User> findAll() {
+        List<User> list = new ArrayList<>();
+        userRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
     @Override
-    public User delete(Long user_id) {
-        User user = userRepository.findByUser_id(user_id);
-        if (user != null) {
-            userRepository.delete(user);
-        } else {
-            throw new UsernameNotFoundException("User does not exist");
-        }
-        return user;
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
+    public User findByUserId(Long user_id) {
+        return userRepository.findByUserId(user_id);
+    }
+
+
+    @Override
     public User update(Long user_id, UserDto user) {
-        User nUser = userRepository.findByUser_id(user_id);
+        User nUser = userRepository.findByUserId(user_id);
         if (nUser != null) {
             nUser.setUsername(user.getUsername());
             nUser.setEmail(user.getEmail());
@@ -113,4 +111,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException("User does not exist");
         }
     }
+
+    @Override
+    public User delete(Long user_id) {
+        User user = userRepository.findByUserId(user_id);
+        if (user != null) {
+            userRepository.delete(user);
+        } else {
+            throw new UsernameNotFoundException("User does not exist");
+        }
+        return user;
+    }
+
+
 }

@@ -25,8 +25,7 @@ public class User {
     private long user_id;
 
     @Column(unique = true, length = 50)
-    @NotNull @NotBlank(message = "Username is mandatory")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @NotNull
     private String username;
 
     @Column(length = 100)
@@ -35,13 +34,11 @@ public class User {
 
     @Column()
     @JsonIgnore
-    @NotNull @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")
+    @NotNull
     private String password;
 
     @Column(unique = true, length = 50)
-    @NotNull @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email must be valid")
+    @NotNull
     private String email;
 
     @Column(length = 50)
