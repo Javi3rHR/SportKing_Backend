@@ -14,21 +14,24 @@ import project.Reservations.service.ReservationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
 
 
-    @GetMapping
+    @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Reservation>> getAll(){
+        if(reservationService.findAll().isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(reservationService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{user_id}")
-    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/users/{user_id}/reservations")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable Long user_id){
         return new ResponseEntity<>(reservationService.findAllByUserId(user_id), HttpStatus.OK);
     }

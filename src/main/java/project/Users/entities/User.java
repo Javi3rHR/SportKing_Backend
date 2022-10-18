@@ -33,7 +33,7 @@ public class User {
     @Size(min = 3, max = 100)
     private String name;
 
-    @Column(length = 50)
+    @Column()
     @JsonIgnore
     @NotNull @NotBlank(message = "Password is mandatory")
     @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")

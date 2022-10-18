@@ -1,5 +1,6 @@
 package project.Users.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,8 @@ import project.Users.dto.LoginUser;
 import project.Users.dto.UserDto;
 import project.Users.entities.User;
 import project.Users.service.UserService;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -71,6 +74,12 @@ public class UserController {
     @GetMapping("/hello-user")
     public String userPing(){
         return "Any User Can Read This";
+    }
+
+    @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getAll(){
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
 }

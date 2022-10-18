@@ -8,8 +8,6 @@ import project.Users.entities.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "user_game")
@@ -29,11 +27,10 @@ public class UserGame {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "sport_id")
-    @Column(length = 50)
     private Sport sport;
 
     @Column
-    @Size(max = 244, message = "Max length is 244")
+    @Lob
     private String annotation;
 
     @Column
