@@ -38,4 +38,16 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    @Override
+    public Reservation deleteById(Long id) {
+        Reservation reservation = reservationRepository.findById(id).get();
+        reservationRepository.deleteById(id);
+        return reservation;
+    }
+
+//    @Override
+//    public Reservation insertReservation(String reservation_date, Long court_id, Long time_interval_id, Long user_id, boolean paid) {
+//        return reservationRepository.insertReservation(reservation_date, court_id, time_interval_id, user_id, paid);
+//    }
+
 }

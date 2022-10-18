@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface ReservationService {
     List<Reservation> findAll();
-    List<Reservation> findAllByUserId(Long user_id);
 
+    List<Reservation> findAllByUserId(Long user_id);
     Reservation save(Reservation reservation);
+
+    Reservation deleteById(Long id);
+
 }

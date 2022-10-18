@@ -76,6 +76,7 @@ public class UserController {
         return "Any User Can Read This";
     }
 
+
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAll(){
@@ -83,6 +84,33 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
+        if(userService.findOne(username) == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userService.findOne(username), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<User> delete(@PathVariable("user_id") Long user_id){
+        if(userService.delete(user_id) == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userService.delete(user_id), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{user_id}")
+    public ResponseEntity<User> update(@PathVariable(value = "user_id") Long user_id, @RequestBody UserDto user){
+        if(userService.update(user_id, user) == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userService.update(user_id, user), HttpStatus.OK);
     }
 
 }

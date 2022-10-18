@@ -30,7 +30,7 @@ public class ReservationController {
 
     @GetMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable Long user_id){
+    public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable("user_id") Long user_id){
         if(reservationService.findAllByUserId(user_id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -38,7 +38,10 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<Reservation> save(@Valid @RequestBody Reservation reservation){
+    public ResponseEntity<Reservation> save( @Valid @RequestBody Reservation reservation){
+        if (reservationService.save(reservation) == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(reservationService.save(reservation), HttpStatus.CREATED);
     }
 

@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user == null){
+        if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-        }); ; // Se pone "ROLE_" para que Spring lo detecte bien
+        });
+        ; // Se pone "ROLE_" para que Spring lo detecte bien
         return authorities;
     }
 
@@ -67,10 +68,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         User nUser = user.getUserFromDto();
 
-        if(userRepository.existsByEmail(nUser.getEmail()))
+        if (userRepository.existsByEmail(nUser.getEmail()))
             throw new EmailAlreadyExistsException("Email ocupado");
 
-        if(userRepository.existsByUsername(nUser.getUsername()))
+        if (userRepository.existsByUsername(nUser.getUsername()))
             throw new UsernameAlreadyExistsException("Username ocupado");
 
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -80,12 +81,36 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
-        if(nUser.getEmail().split("@")[1].equals("admin.edu")){
+        if (nUser.getEmail().split("@")[1].equals("admin.edu")) {
             role = roleService.findByName("ADMIN");
             roleSet.add(role);
         }
 
         nUser.setRoles(roleSet);
         return userRepository.save(nUser);
+    }
+
+    @Override
+    public User delete(Long user_id) {
+        User user = userRepository.findByUser_id(user_id);
+        if (user != null) {
+            userRepository.delete(user);
+        } else {
+            throw new UsernameNotFoundException("User does not exist");
+        }
+        return user;
+    }
+
+    @Override
+    public User update(Long user_id, UserDto user) {
+        User nUser = userRepository.findByUser_id(user_id);
+        if (nUser != null) {
+            nUser.setUsername(user.getUsername());
+            nUser.setEmail(user.getEmail());
+            nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+            return userRepository.save(nUser);
+        } else {
+            throw new UsernameNotFoundException("User does not exist");
+        }
     }
 }
