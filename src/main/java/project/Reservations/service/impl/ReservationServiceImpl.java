@@ -2,6 +2,7 @@ package project.Reservations.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import project.Reservations.entities.Reservation;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
@@ -30,6 +31,11 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> list = new ArrayList<>();
         reservationRepository.findAllByUserId(user_id).iterator().forEachRemaining(list::add);
         return list;
+    }
+
+    @Override
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 
 }

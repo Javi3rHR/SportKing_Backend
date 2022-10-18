@@ -79,6 +79,9 @@ public class UserController {
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAll(){
+        if(userService.findAll().isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
