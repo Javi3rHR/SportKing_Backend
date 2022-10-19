@@ -83,7 +83,7 @@ public class ReservationController {
 
     /* ########## PUT ########## */
     @PutMapping("/users/{user_id}/reservations/{reservation_id}")
-    public Reservation update(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id, @Valid @RequestBody Reservation reservationRequest) {
+    public ResponseEntity<Reservation> update(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id, @Valid @RequestBody Reservation reservationRequest) {
         if (!userService.existsById(user_id)) {
 //            throw new ResourceNotFoundException("Publicacion con el ID : " + publicacionId + " no encontrada");
             throw new RuntimeException("User does not exist");
@@ -94,7 +94,7 @@ public class ReservationController {
             reservation.setPaid(reservationRequest.getPaid() != null ? reservationRequest.getPaid() : reservation.getPaid());
             reservation.setCourt(reservationRequest.getCourt() != null ? reservationRequest.getCourt() : reservation.getCourt());
             reservation.setTime_interval(reservationRequest.getTime_interval() != null ? reservationRequest.getTime_interval() : reservation.getTime_interval());
-            return reservationService.save(reservation);
+            return new ResponseEntity<>(reservationService.save(reservation), HttpStatus.OK);
 //        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado"));
         }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
     }

@@ -100,9 +100,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User update(Long user_id, UserDto user) {
         User nUser = userRepository.findByUserId(user_id);
         if (nUser != null) {
-            nUser.setUsername(user.getUsername());
-            nUser.setEmail(user.getEmail());
-            nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+            nUser.setUsername(user.getUsername() != null ? user.getUsername() : nUser.getUsername());
+            nUser.setEmail(user.getEmail() != null ? user.getEmail() : nUser.getEmail());
+            nUser.setPassword(bcryptEncoder.encode(user.getPassword() != null ? user.getPassword() : nUser.getPassword()));
             return userRepository.save(nUser);
         } else {
             throw new UsernameNotFoundException("User does not exist");
