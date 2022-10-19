@@ -28,6 +28,8 @@ public class Reservation {
     @JsonIgnore
     private User user;
 
+    private String username;
+
     @OneToOne
     @JoinColumn(name = "court_id", referencedColumnName = "court_id")
     private Court court;

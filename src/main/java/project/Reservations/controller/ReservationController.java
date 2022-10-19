@@ -26,7 +26,7 @@ public class ReservationController {
 
     /* ########## GET ########## */
     @GetMapping("/reservations")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Reservation>> getAll(){
         if(reservationService.findAll().isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -37,14 +37,15 @@ public class ReservationController {
     @GetMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable("user_id") Long user_id){
-        if(reservationService.findAllByUserId(user_id).isEmpty()){
+        if(reservationService.findByUserUser_id(user_id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(reservationService.findAllByUserId(user_id), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.findByUserUser_id(user_id), HttpStatus.OK);
     }
 
 
     /* ########## POST ########## */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/reservations")
     public ResponseEntity<Reservation> save( @Valid @RequestBody Reservation reservation){
         if (reservationService.save(reservation) == null){
@@ -59,7 +60,7 @@ public class ReservationController {
         return userService.findById(user_id).map(user -> {
             reservation.setUser(user);
             return reservationService.save(reservation);
-        }).orElseThrow(() -> new RuntimeException("User does not exist"));
+        }).orElseThrow(() -> new RuntimeException("User '"+user_id+"' does not exist"));
     }
 
     /* ########## DELETE ########## */

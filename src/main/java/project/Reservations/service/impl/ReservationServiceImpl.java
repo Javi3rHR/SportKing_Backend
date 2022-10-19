@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import project.Reservations.entities.Reservation;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
+import project.Users.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +28,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> findAllByUserId(Long user_id) {
+    public List<Reservation> findByUserUser_id(Long user_id) {
         List<Reservation> list = new ArrayList<>();
-        reservationRepository.findAllByUserId(user_id).iterator().forEachRemaining(list::add);
+        reservationRepository.findByUserUser_id(user_id).iterator().forEachRemaining(list::add);
         return list;
     }
 
@@ -38,6 +39,9 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation newReservation = new Reservation();
         newReservation.setDate(reservation.getDate());
         newReservation.setUser(reservation.getUser());
+        User user = reservation.getUser();
+        newReservation.setUsername(user.getUsername());
+
         return reservationRepository.save(newReservation);
     }
 

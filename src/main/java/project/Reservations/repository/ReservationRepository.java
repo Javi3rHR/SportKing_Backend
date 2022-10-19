@@ -24,18 +24,21 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
             "AND court_id = :court_id", nativeQuery = true)
     List<Reservation> findByCourtCourtIdAndDateAndTimeIntervalStartHour(Long court_id, String reservation_date, int start_hour);
 
-//    Reservation findById(long id);
-    // InnerJoin para obtener las reservas de un usuario
-    @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
-            "FROM Reservation " +
-            "WHERE user_id = :user_id", nativeQuery = true)
-    List<Reservation> findAllByUserId(Long user_id);
+    @Query(value = "SELECT * FROM reservation WHERE user_id = :user_id", nativeQuery = true)
+    List<Reservation> findByUserUser_id(Long user_id);
 
     @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
             "FROM Reservation WHERE start_hour = :start_hour " +
             "AND reservation_date = :reservation_date", nativeQuery = true)
     Reservation findByDateAndTimeIntervalStartHour(String reservation_date, int start_hour);
 
+    /* Reservas pagadas */
+    @Query(value = "SELECT * FROM reservation WHERE paid = true", nativeQuery = true)
+    List<Reservation> findByPaidIsTrue(boolean paid);
+
+    /* Reservas pendientes de pagar */
+    @Query(value = "SELECT * FROM reservation WHERE paid = false", nativeQuery = true)
+    List<Reservation> findByPaidIsFalse(boolean paid);
 
     /* #### DELETE #### */
 

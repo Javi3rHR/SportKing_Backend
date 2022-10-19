@@ -56,7 +56,7 @@ public class UserAdminController {
     /* ########## PUT ########## */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{user_id}")
-    public ResponseEntity<User> update(@Valid @PathVariable(value = "user_id") Long user_id, @RequestBody UserDto user){
+    public ResponseEntity<User> update(@PathVariable(value = "user_id") Long user_id, @Valid @RequestBody UserDto user){
         if(userService.update(user_id, user) == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
