@@ -35,7 +35,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation save(Reservation reservation) {
-        return reservationRepository.save(reservation);
+        Reservation newReservation = new Reservation();
+        newReservation.setDate(reservation.getDate());
+        newReservation.setUser(reservation.getUser());
+        return reservationRepository.save(newReservation);
     }
 
     @Override
