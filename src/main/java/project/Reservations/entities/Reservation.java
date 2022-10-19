@@ -1,6 +1,5 @@
 package project.Reservations.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -27,8 +26,6 @@ public class Reservation {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
-
-    private String username;
 
     @OneToOne
     @JoinColumn(name = "court_id", referencedColumnName = "court_id")

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import project.Reservations.dto.ReservationDTO;
 import project.Reservations.entities.Reservation;
 import project.Reservations.service.ReservationService;
 import project.Users.service.UserService;
@@ -52,22 +53,11 @@ public class ReservationController {
     }
 
     /* ########## POST ########## */
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/reservations")
-    public ResponseEntity<Reservation> save(@Valid @RequestBody Reservation reservation) {
-        if (reservationService.save(reservation) == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(reservationService.save(reservation), HttpStatus.CREATED);
-    }
 
     @PostMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public Reservation saveByUserId(@PathVariable("user_id") Long user_id, @Valid @RequestBody Reservation reservation) {
-        return userService.findById(user_id).map(user -> {
-            reservation.setUser(user);
-            return reservationService.save(reservation);
-        }).orElseThrow(() -> new RuntimeException("User '" + user_id + "' does not exist"));
+    public ResponseEntity<ReservationDTO> saveByUserId(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDTO reservationDTO) {
+        return new ResponseEntity<>(reservationService.save(user_id, reservationDTO), HttpStatus.CREATED);
     }
 
     /* ########## DELETE ########## */
@@ -82,20 +72,20 @@ public class ReservationController {
     }
 
     /* ########## PUT ########## */
-    @PutMapping("/users/{user_id}/reservations/{reservation_id}")
-    public ResponseEntity<Reservation> update(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id, @Valid @RequestBody Reservation reservationRequest) {
-        if (!userService.existsById(user_id)) {
-//            throw new ResourceNotFoundException("Publicacion con el ID : " + publicacionId + " no encontrada");
-            throw new RuntimeException("User does not exist");
-        }
-        return reservationService.findById(reservation_id).map(reservation -> {
-//            reservation.setUser(reservationRequest.getUser());
-            reservation.setDate(reservationRequest.getDate() != null ? reservationRequest.getDate() : reservation.getDate());
-            reservation.setPaid(reservationRequest.getPaid() != null ? reservationRequest.getPaid() : reservation.getPaid());
-            reservation.setCourt(reservationRequest.getCourt() != null ? reservationRequest.getCourt() : reservation.getCourt());
-            reservation.setTime_interval(reservationRequest.getTime_interval() != null ? reservationRequest.getTime_interval() : reservation.getTime_interval());
-            return new ResponseEntity<>(reservationService.save(reservation), HttpStatus.OK);
-//        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado"));
-        }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
-    }
+//    @PutMapping("/users/{user_id}/reservations/{reservation_id}")
+//    public ResponseEntity<Reservation> update(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id, @Valid @RequestBody Reservation reservationRequest) {
+//        if (!userService.existsById(user_id)) {
+////            throw new ResourceNotFoundException("Publicacion con el ID : " + publicacionId + " no encontrada");
+//            throw new RuntimeException("User does not exist");
+//        }
+//        return reservationService.findById(reservation_id).map(reservation -> {
+////            reservation.setUser(reservationRequest.getUser());
+//            reservation.setDate(reservationRequest.getDate() != null ? reservationRequest.getDate() : reservation.getDate());
+//            reservation.setPaid(reservationRequest.getPaid() != null ? reservationRequest.getPaid() : reservation.getPaid());
+//            reservation.setCourt(reservationRequest.getCourt() != null ? reservationRequest.getCourt() : reservation.getCourt());
+//            reservation.setTime_interval(reservationRequest.getTime_interval() != null ? reservationRequest.getTime_interval() : reservation.getTime_interval());
+//            return new ResponseEntity<>(reservationService.save(reservation), HttpStatus.OK);
+////        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado"));
+//        }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
+//    }
 }
