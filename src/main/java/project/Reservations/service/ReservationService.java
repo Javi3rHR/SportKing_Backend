@@ -13,7 +13,7 @@ public interface ReservationService {
     List<Reservation> findByUserUserId(Long user_id);
     ReservationDTO save(Long user_id, ReservationDTO ReservationDTO);
 
-    void delete(Long reservation_id);
+    void delete(Long user_id, Long reservation_id);
 
     Optional<Reservation> findByIdAndUserUserId(Long reservation_id, Long user_id);
 

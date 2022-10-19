@@ -63,12 +63,9 @@ public class ReservationController {
     /* ########## DELETE ########## */
 
     @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
-        return reservationService.findByIdAndUserUserId(reservation_id, user_id).map(reservation -> {
-            reservationService.delete(reservation.getId());
-            return ResponseEntity.ok().build();
-//        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado y publicacion con el ID : " + publicacionId + " no encontrada"));
-        }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
+    public ResponseEntity<String> delete(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
+        reservationService.delete(user_id, reservation_id);
+        return new ResponseEntity<>("Reservation with id '"+reservation_id+"' has been deleted", HttpStatus.OK);
     }
 
     /* ########## PUT ########## */

@@ -2,7 +2,6 @@ package project.Reservations.service.impl;
 
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.Reservations.dto.ReservationDTO;
 import project.Reservations.entities.Reservation;
@@ -23,13 +22,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     /* Inyección de dependencias */
-    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -69,9 +68,21 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void delete(Long id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
+    public void delete(Long user_id, Long reservation_id) {
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+        Reservation reservation = reservationRepository.findById(reservation_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
+        if(reservation.getUser().getRoles().contains("ROLE_ADMIN")){
+            reservationRepository.delete(reservation);
+            return;
+        }
+//        if(!reservation.getUser().getUser_id().equals(user.getUser_id())){
+//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
+//        }
+
         reservationRepository.delete(reservation);
+
     }
 
 //    @Override
