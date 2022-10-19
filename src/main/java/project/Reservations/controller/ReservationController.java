@@ -37,11 +37,13 @@ public class ReservationController {
     @GetMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable("user_id") Long user_id){
-        if(reservationService.findByUserUser_id(user_id).isEmpty()){
+        if(reservationService.findByUserUserId(user_id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(reservationService.findByUserUser_id(user_id), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.findByUserUserId(user_id), HttpStatus.OK);
     }
+
+
 
 
     /* ########## POST ########## */
@@ -65,16 +67,14 @@ public class ReservationController {
 
     /* ########## DELETE ########## */
 
-    // https://github.com/ChristianRaulRamirez/ejemplos-relaciones-api-rest/blob/master/api-rest-publicaciones-comentarios/src/main/java/com/api/rest/publicaciones/controladores/ComentarioController.java
-
-//    @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
-//    public ResponseEntity<?> delete(@PathVariable(value = "user_id") Long user_id,@PathVariable(value = "reservation_id") Long reservation_id){
-//        return reservationService.findByIdAndUserId(reservation_id, user_id).map(reservation -> {
-//            reservationService.delete(reservation);
-//            return ResponseEntity.ok().build();
-////        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado y publicacion con el ID : " + publicacionId + " no encontrada"));
-//        }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
-//    }
+    @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "user_id") Long user_id,@PathVariable(value = "reservation_id") Long reservation_id){
+        return reservationService.findByIdAndUserUserId(reservation_id, user_id).map(reservation -> {
+            reservationService.delete(reservation.getId());
+            return ResponseEntity.ok().build();
+//        }).orElseThrow(() -> new ResourceNotFoundException("Comentario con el ID : " + comentarioId + " no encontrado y publicacion con el ID : " + publicacionId + " no encontrada"));
+        }).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
+    }
 
     /* ########## PUT ########## */
 //    @PutMapping("/users/{user_id}/reservations/{reservation_id}")

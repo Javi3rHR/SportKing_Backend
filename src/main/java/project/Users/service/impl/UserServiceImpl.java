@@ -110,14 +110,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User delete(Long user_id) {
+    public void delete(Long user_id) {
         User user = userRepository.findByUserId(user_id);
         if (user != null) {
             userRepository.delete(user);
         } else {
             throw new UsernameNotFoundException("User does not exist");
         }
-        return user;
     }
 
     @Override

@@ -18,14 +18,19 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     @Query(value = "SELECT * FROM reservation WHERE court_id = :court_id", nativeQuery = true)
     List<Reservation> findByCourtCourtId(Long court_id);
 
-    @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
+    @Query(value = "SELECT * " +
             "FROM Reservation WHERE start_hour = :start_hour " +
             "AND reservation_date = :reservation_date " +
             "AND court_id = :court_id", nativeQuery = true)
     List<Reservation> findByCourtCourtIdAndDateAndTimeIntervalStartHour(Long court_id, String reservation_date, int start_hour);
 
     @Query(value = "SELECT * FROM reservation WHERE user_id = :user_id", nativeQuery = true)
-    List<Reservation> findByUserUser_id(Long user_id);
+    List<Reservation> findByUserUserId(Long user_id);
+
+    @Query(value = "SELECT * FROM reservation " +
+            "WHERE reservation_id = :reservation_id " +
+            "AND user_id = :user_id", nativeQuery = true)
+    Reservation findByIdAndUserUserId(Long reservation_id, Long user_id);
 
     @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
             "FROM Reservation WHERE start_hour = :start_hour " +
@@ -39,6 +44,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     /* Reservas pendientes de pagar */
     @Query(value = "SELECT * FROM reservation WHERE paid = false", nativeQuery = true)
     List<Reservation> findByPaidIsFalse(boolean paid);
+
+
 
     /* #### DELETE #### */
 

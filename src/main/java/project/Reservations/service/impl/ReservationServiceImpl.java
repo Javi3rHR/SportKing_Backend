@@ -1,8 +1,7 @@
 package project.Reservations.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import project.Reservations.entities.Reservation;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
@@ -10,6 +9,7 @@ import project.Users.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service(value = "reservationService")
 public class ReservationServiceImpl implements ReservationService {
@@ -28,10 +28,15 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> findByUserUser_id(Long user_id) {
+    public List<Reservation> findByUserUserId(Long user_id) {
         List<Reservation> list = new ArrayList<>();
-        reservationRepository.findByUserUser_id(user_id).iterator().forEachRemaining(list::add);
+        reservationRepository.findByUserUserId(user_id).iterator().forEachRemaining(list::add);
         return list;
+    }
+
+    @Override
+    public Optional<Reservation> findByIdAndUserUserId(Long reservation_id, Long user_id) {
+        return Optional.ofNullable(reservationRepository.findByIdAndUserUserId(reservation_id, user_id));
     }
 
     @Override
@@ -46,10 +51,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation deleteById(Long id) {
-        Reservation reservation = reservationRepository.findById(id).get();
-        reservationRepository.deleteById(id);
-        return reservation;
+    public void delete(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reservation does not exist"));
+        reservationRepository.delete(reservation);
     }
 
 //    @Override

@@ -12,7 +12,7 @@ public interface UserService {
     User findByUsername(String username);
     User findByUserId(Long user_id);
     User save(UserDto user);
-    User delete(Long user_id);
+    void delete(Long user_id);
     User update(Long user_id, UserDto user);
 
     boolean existsById(Long user_id);
