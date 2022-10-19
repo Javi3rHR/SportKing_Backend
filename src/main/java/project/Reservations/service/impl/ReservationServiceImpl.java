@@ -28,6 +28,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public Optional<Reservation> findById(Long reservation_id) {
+        return reservationRepository.findById(reservation_id);
+
+    }
+
+    @Override
     public List<Reservation> findByUserUserId(Long user_id) {
         List<Reservation> list = new ArrayList<>();
         reservationRepository.findByUserUserId(user_id).iterator().forEachRemaining(list::add);
@@ -44,6 +50,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation newReservation = new Reservation();
         newReservation.setDate(reservation.getDate());
         newReservation.setUser(reservation.getUser());
+        newReservation.setPaid(reservation.getPaid());
         User user = reservation.getUser();
         newReservation.setUsername(user.getUsername());
 
