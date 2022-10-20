@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import project.Reservations.dto.ReservationDto;
 import project.Reservations.dto.ReservationResponseDto;
 import project.Reservations.service.ReservationService;
-import project.Users.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,11 +17,8 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    private final UserService userService;
-
-    public ReservationController(ReservationService reservationService, UserService userService) {
+    public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
-        this.userService = userService;
     }
 
 

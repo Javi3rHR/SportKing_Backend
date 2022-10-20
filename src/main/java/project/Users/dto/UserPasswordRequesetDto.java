@@ -1,10 +1,10 @@
 package project.Users.dto;
 
-public class UserPasswordRequestDto {
+public class UserPasswordRequesetDto {
     private String password;
     private String passwordConfirm;
 
-    public UserPasswordRequestDto() {
+    public UserPasswordRequesetDto() {
         super();
     }
 
