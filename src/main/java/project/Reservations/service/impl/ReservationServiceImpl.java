@@ -42,7 +42,6 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservations = new ArrayList<>();
         reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
         List<ReservationResponse> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
-        User user = new User();
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
         }catch (Exception e){
