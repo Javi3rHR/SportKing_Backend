@@ -41,4 +41,5 @@ public class Reservation {
 
     @Column
     private Boolean paid;
+
 }

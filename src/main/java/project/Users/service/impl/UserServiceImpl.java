@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
-    /* ########## AUTH ########## */
+    /* #################### AUTH #################### */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
-    /* ########## CRUD ########## */
+    /* #################### CRUD #################### */
 
     public List<User> findAll() {
         List<User> list = new ArrayList<>();

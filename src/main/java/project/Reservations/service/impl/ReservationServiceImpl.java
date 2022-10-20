@@ -51,6 +51,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public Optional<Reservation> findById(Long reservation_id) {
+        return Optional.ofNullable(reservationRepository.findById(reservation_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id)));
+    }
+
+
+    @Override
     public List<ReservationResponse> findByUserUserId(Long user_id) {
         try{
         List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
@@ -58,40 +65,37 @@ public class ReservationServiceImpl implements ReservationService {
             setUserDetails(user_id, reservationResponse);
             return reservationResponse;
         }catch (Exception e){
-            throw new AppException(HttpStatus.BAD_REQUEST, "List of reservations not found.");
+            throw new ResourceNotFoundException("User", "user_id", user_id);
         }
     }
 
-
     @Override
-    public Optional<Reservation> findById(Long reservation_id) {
-        return Optional.ofNullable(reservationRepository.findById(reservation_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id)));
-    }
+    public ReservationResponse findByIdAndUserUserId(Long reservation_id, Long user_id) {
+        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
+        try {
+            Reservation reservation = reservationRepository.findByIdAndUserUserId(reservation_id, user_id);
 
-    @Override
-    public Optional<Reservation> findByIdAndUserUserId(Long reservation_id, Long user_id) {
-        try{
-        return Optional.ofNullable(reservationRepository.findByIdAndUserUserId(reservation_id, user_id));
-        }catch (Exception e){
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not found.");
+        ReservationResponse reservationResponse = mapDTOResponse(reservation);
+        reservationResponse.setUser_id(user.getUser_id());
+        reservationResponse.setUsername(user.getUsername());
+        reservationResponse.setEmail(user.getEmail());
+        reservationResponse.setPhone(user.getPhone());
+
+        return reservationResponse;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
         }
     }
-
 
     /* #################### POST #################### */
     @Override
     public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
-        try{
         Reservation reservation = mapEntity(reservationDTO);
         User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         reservation.setUser(user);
         Reservation newReservation = reservationRepository.save(reservation);
         return mapDTO(newReservation);
-        }catch (Exception e){
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not saved.");
-        }
     }
 
     /* #################### DELETE #################### */

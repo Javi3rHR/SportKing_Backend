@@ -6,7 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import project.Reservations.dto.ReservationDto;
 import project.Reservations.dto.ReservationResponse;
-import project.Reservations.entities.Reservation;
 import project.Reservations.service.ReservationService;
 import project.Users.service.UserService;
 
@@ -42,10 +41,8 @@ public class ReservationController {
 
     @GetMapping("/users/{user_id}/reservations/{reservation_id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Reservation> getByIdAndUserId(@PathVariable("user_id") Long user_id, @PathVariable("reservation_id") Long reservation_id) {
-        return reservationService.findByIdAndUserUserId(reservation_id, user_id)
-                .map(reservation -> new ResponseEntity<>(reservation, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+    public ResponseEntity<ReservationResponse> getByIdAndUserId(@PathVariable("user_id") Long user_id, @PathVariable("reservation_id") Long reservation_id) {
+        return new ResponseEntity<>(reservationService.findByIdAndUserUserId(reservation_id, user_id), HttpStatus.OK);
     }
 
 

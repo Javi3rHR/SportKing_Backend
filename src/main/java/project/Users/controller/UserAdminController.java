@@ -25,7 +25,7 @@ public class UserAdminController {
         this.userService = userService;
     }
 
-    /* ########## GET ########## */
+    /* #################### GET #################### */
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAll(){
@@ -53,7 +53,7 @@ public class UserAdminController {
         return new ResponseEntity<>(userService.findByUserId(user_id), HttpStatus.OK);
     }
 
-    /* ########## PUT ########## */
+    /* #################### PUT #################### */
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{user_id}")
     public ResponseEntity<User> update(@PathVariable(value = "user_id") Long user_id, @Valid @RequestBody UserDto user){
@@ -64,7 +64,7 @@ public class UserAdminController {
     }
 
 
-    /* ########## DELETE ########## */
+    /* #################### DELETE #################### */
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{user_id}")
     public void delete(@PathVariable("user_id") Long user_id){
