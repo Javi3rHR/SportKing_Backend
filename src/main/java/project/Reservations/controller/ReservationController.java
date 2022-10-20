@@ -25,6 +25,7 @@ public class ReservationController {
         this.userService = userService;
     }
 
+
     /* ########## GET ########## */
     @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
@@ -52,6 +53,7 @@ public class ReservationController {
                 .orElseThrow(() -> new RuntimeException("Reservation not found"));
     }
 
+
     /* ########## POST ########## */
 
     @PostMapping("/users/{user_id}/reservations")
@@ -60,13 +62,23 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.save(user_id, reservationDTO), HttpStatus.CREATED);
     }
 
+
     /* ########## DELETE ########## */
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/reservations/{reservation_id}")
+    public ResponseEntity<String> deleteWithAdmin(@PathVariable(value = "reservation_id") Long reservation_id) {
+        reservationService.deleteWithAdmin(reservation_id);
+        return new ResponseEntity<>("Reservation with id '"+reservation_id+"' has been deleted", HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
     public ResponseEntity<String> delete(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
         reservationService.delete(user_id, reservation_id);
         return new ResponseEntity<>("Reservation with id '"+reservation_id+"' has been deleted", HttpStatus.OK);
     }
+
 
     /* ########## PUT ########## */
 //    @PutMapping("/users/{user_id}/reservations/{reservation_id}")

@@ -2,9 +2,11 @@ package project.Reservations.service.impl;
 
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import project.Reservations.dto.ReservationDTO;
 import project.Reservations.entities.Reservation;
+import project.Reservations.exception.AppException;
 import project.Reservations.exception.ResourceNotFoundException;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
@@ -73,17 +75,22 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
         Reservation reservation = reservationRepository.findById(reservation_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
-        if(reservation.getUser().getRoles().contains("ROLE_ADMIN")){
+        if(reservation.getUser().getUser_id() != user.getUser_id()){
+            System.out.println(reservation.getUser().getUser_id()+"--"+ user.getUser_id());
+            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
+        }else{
+            System.out.println(reservation.getUser().getUser_id()+"--"+ user.getUser_id());
             reservationRepository.delete(reservation);
-            return;
         }
-//        if(!reservation.getUser().getUser_id().equals(user.getUser_id())){
-//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
-//        }
-
-        reservationRepository.delete(reservation);
-
     }
+
+    @Override
+    public void deleteWithAdmin(Long reservation_id) {
+        Reservation reservation = reservationRepository.findById(reservation_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
+
+            reservationRepository.delete(reservation);
+        }
 
 //    @Override
 //    public Reservation insertReservation(String reservation_date, Long court_id, Long time_interval_id, Long user_id, boolean paid) {
