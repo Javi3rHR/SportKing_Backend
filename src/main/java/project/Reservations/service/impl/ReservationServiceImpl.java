@@ -4,7 +4,8 @@ package project.Reservations.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import project.Reservations.dto.ReservationDTO;
+import project.Reservations.dto.ReservationDto;
+import project.Reservations.dto.ReservationResponse;
 import project.Reservations.entities.Reservation;
 import project.Reservations.exception.AppException;
 import project.Reservations.exception.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import project.Users.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service(value = "reservationService")
 public class ReservationServiceImpl implements ReservationService {
@@ -41,17 +43,31 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<ReservationResponse> findByUserUserId(Long user_id) {
+
+        List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
+        List<ReservationResponse> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+
+        /* TODO Refactorizar para no tener que recorrer todas*/
+        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+        for(ReservationResponse r : reservationResponse){
+            if(r.getUser_id() == user_id){
+                r.setUsername(user.getUsername());
+                r.setEmail(user.getEmail());
+                r.setPhone(user.getPhone());
+            }
+        }
+        return reservationResponse;
+
+    }
+
+    @Override
     public Optional<Reservation> findById(Long reservation_id) {
         return reservationRepository.findById(reservation_id);
 
     }
 
-    @Override
-    public List<Reservation> findByUserUserId(Long user_id) {
-        List<Reservation> list = new ArrayList<>();
-        reservationRepository.findByUserUserId(user_id).iterator().forEachRemaining(list::add);
-        return list;
-    }
+
 
     @Override
     public Optional<Reservation> findByIdAndUserUserId(Long reservation_id, Long user_id) {
@@ -59,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDTO save(Long user_id, ReservationDTO reservationDTO) {
+    public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
         Reservation reservation = mapEntity(reservationDTO);
         User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
@@ -99,12 +115,16 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* MAPPER */
     // Convierte entidad a DTO
-    private ReservationDTO mapDTO(Reservation reservation) {
-        return modelMapper.map(reservation, ReservationDTO.class);
+    private ReservationDto mapDTO(Reservation reservation) {
+        return modelMapper.map(reservation, ReservationDto.class);
+    }
+
+    private ReservationResponse mapDTOResponse(Reservation reservation) {
+        return modelMapper.map(reservation, ReservationResponse.class);
     }
 
     // Convierte de DTO a Entidad
-    private Reservation mapEntity(ReservationDTO reservationDTO) {
+    private Reservation mapEntity(ReservationDto reservationDTO) {
         return modelMapper.map(reservationDTO, Reservation.class);
     }
 

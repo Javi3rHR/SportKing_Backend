@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class ReservationDTO {
+public class ReservationDto {
 
     private long id;
 
@@ -30,7 +30,7 @@ public class ReservationDTO {
     @NotNull(message = "Paid is required")
     private Boolean paid;
 
-    public ReservationDTO() {
+    public ReservationDto() {
         super();
     }
 

@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import project.Reservations.dto.ReservationDTO;
+import project.Reservations.dto.ReservationDto;
+import project.Reservations.dto.ReservationResponse;
 import project.Reservations.entities.Reservation;
 import project.Reservations.service.ReservationService;
 import project.Users.service.UserService;
@@ -38,10 +39,7 @@ public class ReservationController {
 
     @GetMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<List<Reservation>> getAllByUserId(@PathVariable("user_id") Long user_id) {
-        if (reservationService.findByUserUserId(user_id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public ResponseEntity<List<ReservationResponse>> getAllByUserId(@PathVariable("user_id") Long user_id) {
         return new ResponseEntity<>(reservationService.findByUserUserId(user_id), HttpStatus.OK);
     }
 
@@ -58,7 +56,7 @@ public class ReservationController {
 
     @PostMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<ReservationDTO> saveByUserId(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDTO reservationDTO) {
+    public ResponseEntity<ReservationDto> saveByUserId(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDto reservationDTO) {
         return new ResponseEntity<>(reservationService.save(user_id, reservationDTO), HttpStatus.CREATED);
     }
 
