@@ -1,4 +1,4 @@
-package project.Reservations.dto;
+package project.Reservations.dto.reservation;
 
 import lombok.Getter;
 import lombok.Setter;

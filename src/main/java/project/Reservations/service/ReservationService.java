@@ -1,7 +1,7 @@
 package project.Reservations.service;
 
-import project.Reservations.dto.ReservationDto;
-import project.Reservations.dto.ReservationResponseDto;
+import project.Reservations.dto.reservation.ReservationDto;
+import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 
 import java.util.List;

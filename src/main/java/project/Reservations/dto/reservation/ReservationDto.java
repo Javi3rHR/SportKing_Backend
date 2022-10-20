@@ -1,4 +1,4 @@
-package project.Reservations.dto;
+package project.Reservations.dto.reservation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

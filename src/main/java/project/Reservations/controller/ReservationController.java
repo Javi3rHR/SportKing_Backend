@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import project.Reservations.dto.ReservationDto;
-import project.Reservations.dto.ReservationResponseDto;
+import project.Reservations.dto.reservation.ReservationDto;
+import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.service.ReservationService;
 
 import javax.validation.Valid;
@@ -46,7 +46,7 @@ public class ReservationController {
 
     @PostMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<ReservationDto> saveByUserId(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDto reservationDTO) {
+    public ResponseEntity<ReservationDto> makeReservation(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDto reservationDTO) {
         return new ResponseEntity<>(reservationService.save(user_id, reservationDTO), HttpStatus.CREATED);
     }
 
@@ -62,7 +62,7 @@ public class ReservationController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
-    public ResponseEntity<String> delete(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
+    public ResponseEntity<String> cancelReservation(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
         reservationService.delete(user_id, reservation_id);
         return new ResponseEntity<>("Reservation with id '"+reservation_id+"' has been deleted", HttpStatus.OK);
     }
