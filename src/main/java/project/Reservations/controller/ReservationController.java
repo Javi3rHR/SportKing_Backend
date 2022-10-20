@@ -27,13 +27,10 @@ public class ReservationController {
     }
 
 
-    /* ########## GET ########## */
+    /* #################### GET #################### */
     @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Reservation>> getAll() {
-        if (reservationService.findAll().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public ResponseEntity<List<ReservationResponse>> getAll() {
         return new ResponseEntity<>(reservationService.findAll(), HttpStatus.OK);
     }
 
@@ -52,7 +49,7 @@ public class ReservationController {
     }
 
 
-    /* ########## POST ########## */
+    /* #################### POST #################### */
 
     @PostMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
@@ -61,7 +58,7 @@ public class ReservationController {
     }
 
 
-    /* ########## DELETE ########## */
+    /* #################### DELETE #################### */
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/reservations/{reservation_id}")
@@ -78,7 +75,7 @@ public class ReservationController {
     }
 
 
-    /* ########## PUT ########## */
+    /* #################### PUT #################### */
 //    @PutMapping("/users/{user_id}/reservations/{reservation_id}")
 //    public ResponseEntity<Reservation> update(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id, @Valid @RequestBody Reservation reservationRequest) {
 //        if (!userService.existsById(user_id)) {

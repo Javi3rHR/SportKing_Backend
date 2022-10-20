@@ -9,7 +9,7 @@ import java.util.Optional;
 
 
 public interface ReservationService {
-    List<Reservation> findAll();
+    List<ReservationResponse> findAll();
 
     List<ReservationResponse> findByUserUserId(Long user_id);
     ReservationDto save(Long user_id, ReservationDto ReservationDTO);

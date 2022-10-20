@@ -14,15 +14,7 @@ public class ReservationResponse {
     private String date;
     private String time_interval;
     private Boolean paid;
-//    @JsonIgnore
-//    private User user;
-//    public User userResponse() {
-//        userResponse().setUser_id(user.getUser_id());
-//        userResponse().setUsername(user.getUsername());
-//        userResponse().setEmail(user.getEmail());
-//        userResponse().setPhone(user.getPhone());
-//        return userResponse();
-//    }
+
     public ReservationResponse() {
         super();
     }
