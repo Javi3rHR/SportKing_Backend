@@ -44,6 +44,7 @@ public class User {
 
     @Column(length = 100)
     @Size(max = 100)
+    @JsonIgnore
     private String credit_card;
 
     @Column

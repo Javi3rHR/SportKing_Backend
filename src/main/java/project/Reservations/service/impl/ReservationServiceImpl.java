@@ -67,8 +67,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
-
-
     @Override
     public Optional<Reservation> findByIdAndUserUserId(Long reservation_id, Long user_id) {
         return Optional.ofNullable(reservationRepository.findByIdAndUserUserId(reservation_id, user_id));
