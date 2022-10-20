@@ -103,6 +103,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             nUser.setUsername(user.getUsername() != null ? user.getUsername() : nUser.getUsername());
             nUser.setEmail(user.getEmail() != null ? user.getEmail() : nUser.getEmail());
             nUser.setPassword(bcryptEncoder.encode(user.getPassword() != null ? user.getPassword() : nUser.getPassword()));
+            nUser.setPhone(user.getPhone() != null ? user.getPhone() : nUser.getPhone());
+            nUser.setName(user.getName() != null ? user.getName() : nUser.getName());
             return userRepository.save(nUser);
         } else {
             throw new UsernameNotFoundException("User does not exist");
