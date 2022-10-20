@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import project.Reservations.dto.ReservationDto;
-import project.Reservations.dto.ReservationResponse;
+import project.Reservations.dto.ReservationResponseDto;
 import project.Reservations.service.ReservationService;
 import project.Users.service.UserService;
 
@@ -29,19 +29,19 @@ public class ReservationController {
     /* #################### GET #################### */
     @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ReservationResponse>> getAll() {
+    public ResponseEntity<List<ReservationResponseDto>> getAll() {
         return new ResponseEntity<>(reservationService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{user_id}/reservations")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<List<ReservationResponse>> getAllByUserId(@PathVariable("user_id") Long user_id) {
+    public ResponseEntity<List<ReservationResponseDto>> getAllByUserId(@PathVariable("user_id") Long user_id) {
         return new ResponseEntity<>(reservationService.findByUserUserId(user_id), HttpStatus.OK);
     }
 
     @GetMapping("/users/{user_id}/reservations/{reservation_id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<ReservationResponse> getByIdAndUserId(@PathVariable("user_id") Long user_id, @PathVariable("reservation_id") Long reservation_id) {
+    public ResponseEntity<ReservationResponseDto> getByIdAndUserId(@PathVariable("user_id") Long user_id, @PathVariable("reservation_id") Long reservation_id) {
         return new ResponseEntity<>(reservationService.findByIdAndUserUserId(reservation_id, user_id), HttpStatus.OK);
     }
 

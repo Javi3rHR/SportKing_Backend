@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import project.Reservations.dto.ReservationDto;
-import project.Reservations.dto.ReservationResponse;
+import project.Reservations.dto.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 import project.Reservations.exception.AppException;
 import project.Reservations.exception.ResourceNotFoundException;
@@ -37,11 +37,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* #################### GET #################### */
     @Override
-    public List<ReservationResponse> findAll() {
+    public List<ReservationResponseDto> findAll() {
         try{
         List<Reservation> reservations = new ArrayList<>();
         reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
-        List<ReservationResponse> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
         }catch (Exception e){
@@ -57,10 +57,10 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public List<ReservationResponse> findByUserUserId(Long user_id) {
+    public List<ReservationResponseDto> findByUserUserId(Long user_id) {
         try{
         List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
-        List<ReservationResponse> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
             setUserDetails(user_id, reservationResponse);
             return reservationResponse;
         }catch (Exception e){
@@ -69,12 +69,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationResponse findByIdAndUserUserId(Long reservation_id, Long user_id) {
+    public ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id) {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         try {
             Reservation reservation = reservationRepository.findByIdAndUserUserId(reservation_id, user_id);
 
-        ReservationResponse reservationResponse = mapDTOResponse(reservation);
+        ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
         reservationResponse.setUser_id(user.getUser_id());
         reservationResponse.setUsername(user.getUsername());
         reservationResponse.setEmail(user.getEmail());
@@ -83,6 +83,18 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationResponse;
         } catch (Exception e) {
             throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
+        }
+    }
+
+    @Override
+    public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
+        try{
+        List<Reservation> reservations = reservationRepository.findByCourtCourtId(court_id);
+        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+            setUserDetailsWithoutUserID(reservationResponse);
+            return reservationResponse;
+        }catch (Exception e){
+            throw new ResourceNotFoundException("Court", "court_id", court_id);
         }
     }
 
@@ -148,9 +160,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-    private ReservationResponse mapDTOResponse(Reservation reservation) {
+    private ReservationResponseDto mapDTOResponse(Reservation reservation) {
         try{
-        return modelMapper.map(reservation, ReservationResponse.class);
+        return modelMapper.map(reservation, ReservationResponseDto.class);
         }catch (Exception e){
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
         }
@@ -170,9 +182,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* TODO Refactorizar para no tener que recorrer todas */
     /* Insertar los campos de User en ReservationResponse pasando user_id */
-    private void setUserDetails(Long user_id, List<ReservationResponse> reservationResponse) {
+    private void setUserDetails(Long user_id, List<ReservationResponseDto> reservationResponse) {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
-        for(ReservationResponse r : reservationResponse){
+        for(ReservationResponseDto r : reservationResponse){
             if(r.getUser_id() == user_id){
                 r.setUsername(user.getUsername());
                 r.setEmail(user.getEmail());
@@ -181,9 +193,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
     /* Insertar los campos de User en ReservationResponse sin pasar user_id */
-    private void setUserDetailsWithoutUserID(List<ReservationResponse> reservationResponse) {
+    private void setUserDetailsWithoutUserID(List<ReservationResponseDto> reservationResponse) {
         User user;
-        for (ReservationResponse r : reservationResponse) {
+        for (ReservationResponseDto r : reservationResponse) {
             user = userRepository.findById(r.getUser_id()).orElseThrow(() -> new ResourceNotFoundException("User", "id", r.getUser_id()));
             Long user_id = user.getUser_id();
             r.setUsername(user.getUsername());

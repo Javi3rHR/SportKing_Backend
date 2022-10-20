@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ReservationResponse {
+public class ReservationResponseDto {
     private long id;
     private long user_id;
     private String username;
@@ -15,7 +15,7 @@ public class ReservationResponse {
     private String time_interval;
     private Boolean paid;
 
-    public ReservationResponse() {
+    public ReservationResponseDto() {
         super();
     }
 
