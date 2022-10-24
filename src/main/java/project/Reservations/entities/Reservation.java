@@ -16,10 +16,11 @@ import javax.persistence.*;
 @Getter @Setter @ToString
 public class Reservation {
 
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    private long id;
+    private long reservation_id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)

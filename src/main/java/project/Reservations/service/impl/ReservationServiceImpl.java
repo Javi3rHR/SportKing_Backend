@@ -38,13 +38,13 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### GET #################### */
     @Override
     public List<ReservationResponseDto> findAll() {
-        try{
-        List<Reservation> reservations = new ArrayList<>();
-        reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
-        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+        try {
+            List<Reservation> reservations = new ArrayList<>();
+            reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
+            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "List of reservations not found.");
         }
     }
@@ -58,12 +58,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationResponseDto> findByUserUserId(Long user_id) {
-        try{
-        List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
-        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+        try {
+            List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
+            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
             setUserDetails(user_id, reservationResponse);
             return reservationResponse;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResourceNotFoundException("User", "user_id", user_id);
         }
     }
@@ -74,13 +74,13 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             Reservation reservation = reservationRepository.findByIdAndUserUserId(reservation_id, user_id);
 
-        ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
-        reservationResponse.setUser_id(user.getUser_id());
-        reservationResponse.setUsername(user.getUsername());
-        reservationResponse.setEmail(user.getEmail());
-        reservationResponse.setPhone(user.getPhone());
+            ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
+            reservationResponse.setUser_id(user.getUser_id());
+            reservationResponse.setUsername(user.getUsername());
+            reservationResponse.setEmail(user.getEmail());
+            reservationResponse.setPhone(user.getPhone());
 
-        return reservationResponse;
+            return reservationResponse;
         } catch (Exception e) {
             throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
         }
@@ -88,12 +88,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
-        try{
-        List<Reservation> reservations = reservationRepository.findByCourtCourtId(court_id);
-        List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
+        try {
+            List<Reservation> reservations = reservationRepository.findByCourtCourtId(court_id);
+            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResourceNotFoundException("Court", "court_id", court_id);
         }
     }
@@ -105,6 +105,10 @@ public class ReservationServiceImpl implements ReservationService {
         User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         reservation.setUser(user);
+        // TODO comprobar que funciona y retocar una vez tenga datos
+//        if (checkReservationAlreadyExists(reservation.getCourt().getCourt_id(), reservation.getDate(), reservation.getTime_interval().getStart_time())) {
+//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation already exists.");
+//        }
         Reservation newReservation = reservationRepository.save(reservation);
         return mapDTO(newReservation);
     }
@@ -112,32 +116,31 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### DELETE #################### */
     @Override
     public void delete(Long user_id, Long reservation_id) {
-        try{
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
-        Reservation reservation = reservationRepository.findById(reservation_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
-        if(reservation.getUser().getUser_id() != user.getUser_id()){
-            System.out.println(reservation.getUser().getUser_id()+"--"+ user.getUser_id());
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
-        }else{
-            System.out.println(reservation.getUser().getUser_id()+"--"+ user.getUser_id());
-            reservationRepository.delete(reservation);
-        }
-        }catch (Exception e){
+        try {
+            User user = userRepository.findById(user_id)
+                    .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+            Reservation reservation = reservationRepository.findById(reservation_id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
+            if (reservation.getUser().getUser_id() != user.getUser_id()) {
+                System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
+                throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
+            } else {
+                System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
+                reservationRepository.delete(reservation);
+            }
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not deleted.");
         }
     }
 
     @Override
     public void deleteWithAdmin(Long reservation_id) {
-        try{
-        Reservation reservation = reservationRepository.findById(reservation_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
+        try {
+            Reservation reservation = reservationRepository.findById(reservation_id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
 
             reservationRepository.delete(reservation);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not deleted.");
         }
     }
@@ -153,26 +156,26 @@ public class ReservationServiceImpl implements ReservationService {
 
     // Convierte entidad a DTO
     private ReservationDto mapDTO(Reservation reservation) {
-        try{
-        return modelMapper.map(reservation, ReservationDto.class);
-        }catch (Exception e){
+        try {
+            return modelMapper.map(reservation, ReservationDto.class);
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
         }
     }
 
     private ReservationResponseDto mapDTOResponse(Reservation reservation) {
-        try{
-        return modelMapper.map(reservation, ReservationResponseDto.class);
-        }catch (Exception e){
+        try {
+            return modelMapper.map(reservation, ReservationResponseDto.class);
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
         }
     }
 
     // Convierte de DTO a Entidad
     private Reservation mapEntity(ReservationDto reservationDTO) {
-        try{
-        return modelMapper.map(reservationDTO, Reservation.class);
-        }catch (Exception e){
+        try {
+            return modelMapper.map(reservationDTO, Reservation.class);
+        } catch (Exception e) {
             throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
         }
     }
@@ -184,14 +187,15 @@ public class ReservationServiceImpl implements ReservationService {
     /* Insertar los campos de User en ReservationResponse pasando user_id */
     private void setUserDetails(Long user_id, List<ReservationResponseDto> reservationResponse) {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
-        for(ReservationResponseDto r : reservationResponse){
-            if(r.getUser_id() == user_id){
+        for (ReservationResponseDto r : reservationResponse) {
+            if (r.getUser_id() == user_id) {
                 r.setUsername(user.getUsername());
                 r.setEmail(user.getEmail());
                 r.setPhone(user.getPhone());
             }
         }
     }
+
     /* Insertar los campos de User en ReservationResponse sin pasar user_id */
     private void setUserDetailsWithoutUserID(List<ReservationResponseDto> reservationResponse) {
         User user;
@@ -205,4 +209,15 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /* #################### CHECK #################### */
+    /* Comprueba si una pista está disponible para reservar */
+    @Override
+    public boolean checkReservationAlreadyExists(Long court_id, String reservation_date, String start_time) {
+        try {
+            List<Reservation> reservations = reservationRepository.findByCourtCourtIdAndDateAndTimeIntervalStartTime(court_id, reservation_date, start_time);
+            return reservations.size() > 0;
+        } catch (Exception e) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not checked.");
+        }
+    }
 }

@@ -17,11 +17,12 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     @Query(value = "SELECT * FROM reservation WHERE court_id = :court_id", nativeQuery = true)
     List<Reservation> findByCourtCourtId(Long court_id);
 
-    @Query(value = "SELECT * " +
-            "FROM Reservation WHERE start_hour = :start_hour " +
-            "AND reservation_date = :reservation_date " +
-            "AND court_id = :court_id", nativeQuery = true)
-    List<Reservation> findByCourtCourtIdAndDateAndTimeIntervalStartHour(Long court_id, String reservation_date, int start_hour);
+    // InnerJoin con TimeInterval para sacar start_time
+    @Query(value = "SELECT court_id, reservation_date, start_time " +
+            "FROM reservation " +
+            "INNER JOIN time_interval" +
+            "ON time_interval_id.reservation = time_interval_id.time_interval", nativeQuery = true)
+    List<Reservation> findByCourtCourtIdAndDateAndTimeIntervalStartTime(Long court_id, String reservation_date, String start_time);
 
     @Query(value = "SELECT * FROM reservation WHERE user_id = :user_id", nativeQuery = true)
     List<Reservation> findByUserUserId(Long user_id);
@@ -32,9 +33,9 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     Reservation findByIdAndUserUserId(Long reservation_id, Long user_id);
 
     @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
-            "FROM Reservation WHERE start_hour = :start_hour " +
+            "FROM Reservation WHERE start_time = :start_time " +
             "AND reservation_date = :reservation_date", nativeQuery = true)
-    Reservation findByDateAndTimeIntervalStartHour(String reservation_date, int start_hour);
+    Reservation findByDateAndTimeIntervalStartHour(String reservation_date, int start_time);
 
     /* Reservas pagadas */
     @Query(value = "SELECT * FROM reservation WHERE paid = true", nativeQuery = true)

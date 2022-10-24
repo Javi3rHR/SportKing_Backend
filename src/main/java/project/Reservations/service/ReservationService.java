@@ -17,4 +17,5 @@ public interface ReservationService {
     void deleteWithAdmin(Long reservation_id);
     ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id);
     Optional<Reservation> findById(Long reservation_id);
+    boolean checkReservationAlreadyExists(Long court_id, String reservation_date, String start_time);
 }

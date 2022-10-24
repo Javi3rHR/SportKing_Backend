@@ -14,7 +14,7 @@ public class Court {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "court_id")
-    private long id;
+    private long court_id;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
