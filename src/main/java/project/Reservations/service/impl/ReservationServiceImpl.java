@@ -14,7 +14,9 @@ import project.Reservations.service.ReservationService;
 import project.Users.entities.User;
 import project.Users.repository.UserRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -109,6 +111,18 @@ public class ReservationServiceImpl implements ReservationService {
 //        if (checkReservationAlreadyExists(reservation.getCourt().getCourt_id(), reservation.getDate(), reservation.getTime_interval().getStart_time())) {
 //            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation already exists.");
 //        }
+//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Comprobar formato de fecha
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        try{
+        calendar.setTime(reservation.getDate());
+        sdf.format(calendar.getTime());
+        reservation.setDate(calendar.getTime());
+        }catch (Exception e){  // TODO comprobar si funciona Appexception
+            throw new AppException(HttpStatus.BAD_REQUEST, "Date format is not correct.");
+        }
         Reservation newReservation = reservationRepository.save(reservation);
         return mapDTO(newReservation);
     }

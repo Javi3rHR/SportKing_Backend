@@ -9,6 +9,7 @@ import project.Users.entities.User;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -24,8 +25,8 @@ public class ReservationDto {
     private TimeInterval time_interval;
 
     @NotNull(message = "Date is required")
-    @JsonFormat(pattern="YYYY-MM-dd")
-    private String date;
+    @JsonFormat(pattern="dd/MM/yyyy")
+    private Date date;
 
     @NotNull(message = "Paid is required")
     private Boolean paid;

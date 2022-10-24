@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import project.Users.entities.User;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "reservation")
@@ -37,8 +38,9 @@ public class Reservation {
     private TimeInterval time_interval;
 
     @Column(name = "reservation_date")
-    @JsonFormat(pattern="YYYY-MM-dd")
-    private String date;
+    @JsonFormat(pattern="dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
+    private Date date;
 
     @Column
     private Boolean paid;
