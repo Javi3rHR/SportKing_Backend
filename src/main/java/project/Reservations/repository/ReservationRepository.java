@@ -46,7 +46,6 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     List<Reservation> findByPaidIsFalse(boolean paid);
 
 
-
     /* #### DELETE #### */
 
 //    @Modifying

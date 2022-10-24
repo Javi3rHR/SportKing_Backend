@@ -1,5 +1,6 @@
 package project.Reservations.dto.reservation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ public class ReservationResponseDto {
     private String email;
     private String phone;
     private String court;
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date date;
     private String time_interval;
     private Boolean paid;

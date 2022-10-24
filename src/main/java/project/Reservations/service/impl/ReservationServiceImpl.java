@@ -15,10 +15,7 @@ import project.Users.entities.User;
 import project.Users.repository.UserRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(value = "reservationService")
@@ -116,13 +113,20 @@ public class ReservationServiceImpl implements ReservationService {
         // Comprobar formato de fecha
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
+
         try{
         calendar.setTime(reservation.getDate());
         sdf.format(calendar.getTime());
         reservation.setDate(calendar.getTime());
-        }catch (Exception e){  // TODO comprobar si funciona Appexception
-            throw new AppException(HttpStatus.BAD_REQUEST, "Date format is not correct.");
+        }catch (Exception e){
+            throw new RuntimeException("Date format is not correct.");
         }
+
+        // Comprobar si la fecha es anterior a la actual
+        if (!reservation.getDate().after(new Date()) && !reservation.getDate().equals(new Date())) {
+            throw new RuntimeException("Date '"+reservation.getDate()+"' is not valid.");
+        }
+
         Reservation newReservation = reservationRepository.save(reservation);
         return mapDTO(newReservation);
     }
@@ -137,13 +141,13 @@ public class ReservationServiceImpl implements ReservationService {
                     .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
             if (reservation.getUser().getUser_id() != user.getUser_id()) {
                 System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
-                throw new AppException(HttpStatus.BAD_REQUEST, "Reservation does not belong to user");
+                throw new RuntimeException("Reservation does not belong to user");
             } else {
                 System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
                 reservationRepository.delete(reservation);
             }
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not deleted.");
+            throw new RuntimeException("Reservation not deleted.");
         }
     }
 
@@ -155,7 +159,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             reservationRepository.delete(reservation);
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not deleted.");
+            throw new RuntimeException("Reservation not deleted.");
         }
     }
 
@@ -173,7 +177,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservation, ReservationDto.class);
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
+            throw new RuntimeException("Reservation not mapped.");
         }
     }
 
@@ -181,7 +185,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservation, ReservationResponseDto.class);
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
+            throw new RuntimeException("Reservation not mapped.");
         }
     }
 
@@ -190,7 +194,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservationDTO, Reservation.class);
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not mapped.");
+            throw new RuntimeException("Reservation not mapped.");
         }
     }
 
@@ -231,7 +235,18 @@ public class ReservationServiceImpl implements ReservationService {
             List<Reservation> reservations = reservationRepository.findByCourtCourtIdAndDateAndTimeIntervalStartTime(court_id, reservation_date, start_time);
             return reservations.size() > 0;
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not checked.");
+            throw new RuntimeException("Reservation not checked.");
         }
     }
+
+//    public boolean checkReservationDateAfterToday(String reservation_date) {
+//        try {
+//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//            Date date = sdf.parse(reservation_date);
+//            Date today = new Date();
+//            return date.after(today);
+//        } catch (Exception e) {
+//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not checked.");
+//        }
+//    }
 }
