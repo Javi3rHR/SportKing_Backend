@@ -14,6 +14,7 @@ import project.Reservations.service.ReservationService;
 import project.Users.entities.User;
 import project.Users.repository.UserRepository;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,9 +123,19 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException("Date format is not correct.");
         }
 
-        // Comprobar si la fecha es anterior a la actual
-        if (!reservation.getDate().after(new Date()) && !reservation.getDate().equals(new Date())) {
-            throw new RuntimeException("Date '"+reservation.getDate()+"' is not valid.");
+        // Comprobar que la fecha no sea anterior a la actual
+        String today = sdf.format(new Date());
+        String reservationDate = sdf.format(reservation.getDate());
+        Date todayDate = null;
+        Date reservationDateDate = null;
+        try {
+            todayDate = sdf.parse(today);
+            reservationDateDate = sdf.parse(reservationDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        if (reservationDateDate.before(todayDate)) {
+            throw new RuntimeException("Reservation date '"+reservationDate+"' must be after today's date '"+today+"'.");
         }
 
         Reservation newReservation = reservationRepository.save(reservation);
