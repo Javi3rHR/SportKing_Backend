@@ -17,8 +17,6 @@ import project.Security.config.exception.CustomAccessDeniedHandler;
 import project.Security.config.exception.UnauthorizedEntryPoint;
 import project.Security.jwt.JwtAuthFilter;
 
-import javax.annotation.Resource;
-
 /**
  * Clase para la configuración de seguridad Spring Security
  */
