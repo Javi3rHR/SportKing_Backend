@@ -1,5 +1,6 @@
 package project.Reservations.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,7 @@ public class TimeInterval {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "time_interval_id")
-    private long time_interval_id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name = "court_id")
@@ -22,8 +23,10 @@ public class TimeInterval {
 
     /* 9:00 - 10:30 */
     @Column
+    @JsonFormat(pattern="HH:mm")
     private String start_time;
 
+    @JsonFormat(pattern="HH:mm")
     @Column
     private String end_time;
 

@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "court")
@@ -14,15 +15,11 @@ public class Court {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "court_id")
-    private long court_id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "sport_id")
     private Sport sport;
-
-    /* Horario de apertura y de cerrada general Ej. 9:00 - 23:00 */
-    @Column
-    private String time_interval;
 
     @Column(name = "court_name", length = 50)
     @Size(max = 50, message = "Max length is 50")
@@ -30,4 +27,7 @@ public class Court {
 
     @Column(name = "court_price")
     private double price;
+
+    @OneToMany
+    private List<TimeInterval> time_intervals;
 }
