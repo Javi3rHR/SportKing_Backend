@@ -46,6 +46,16 @@ public class SportServiceImpl implements SportService {
         }
     }
 
+    @Override
+    public SportDto findById(Long id) {
+        try{
+        Sport sport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
+            return mapDTO(sport);
+        }catch (Exception e){
+            throw new RuntimeException("Error while getting sport by id");
+        }
+    }
+
     /* #################### POST #################### */
 
     @Override

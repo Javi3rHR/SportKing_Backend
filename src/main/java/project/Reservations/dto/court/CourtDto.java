@@ -14,9 +14,9 @@ import java.util.List;
 public class CourtDto {
 
         private long id;
-        @NotNull(message = "Sport is required")
+        @NotNull(message = "Name is required")
         private String name;
-        @NotEmpty(message = "Name is required")
+        @NotEmpty(message = "Sport is required")
         private Sport sport;
         private double price;
         private List<TimeInterval> time_intervals;

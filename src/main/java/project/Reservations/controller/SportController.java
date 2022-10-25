@@ -28,6 +28,12 @@ public class SportController {
         return new ResponseEntity<>(sportService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/sports/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SportDto> getOne(@PathVariable Long id) {
+        return new ResponseEntity<>(sportService.findById(id), HttpStatus.OK);
+    }
+
 
     /* #################### POST #################### */
     @PostMapping("/sports")
