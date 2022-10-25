@@ -4,6 +4,7 @@ import project.Reservations.dto.sport.SportDto;
 
 import java.util.List;
 
-public interface SportsService {
+public interface SportService {
     List<SportDto> findAll();
+    SportDto findByName(String name);
 }

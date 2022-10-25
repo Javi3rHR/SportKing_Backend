@@ -2,12 +2,10 @@ package project.Reservations.service.impl;
 
 
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import project.Reservations.dto.reservation.ReservationDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
-import project.Reservations.exception.AppException;
 import project.Reservations.exception.ResourceNotFoundException;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
@@ -45,7 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
         } catch (Exception e) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "List of reservations not found.");
+            throw new RuntimeException("List of reservations not found.");
         }
     }
 
