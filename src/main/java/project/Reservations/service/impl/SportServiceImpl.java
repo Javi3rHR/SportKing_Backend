@@ -68,6 +68,9 @@ public class SportServiceImpl implements SportService {
         if (!sportRepository.existsById(sportDto.getId())) {
             throw new RuntimeException("Sport with id '" + sportDto.getId() + "' doesn't exist");
         }
+        if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
+            throw new RuntimeException("Sport with name '" + sportDto.getSport_name() + "' already exists");
+        }
         return sportRepository.findById(sportDto.getId())
                 .map(sport -> {
                     sport.setSport_name(sportDto.getSport_name() != null ? sportDto.getSport_name() : sport.getSport_name());
