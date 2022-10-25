@@ -9,7 +9,6 @@ import project.Users.dto.UserDto;
 import project.Users.entities.User;
 import project.Users.service.UserService;
 
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class UserAdminController {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or #username == principal.username")
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getByUsername(@PathVariable("username") String username){
         if(userService.findByUsername(username) == null){
@@ -70,6 +69,14 @@ public class UserAdminController {
     public void delete(@PathVariable("user_id") Long user_id){
         userService.delete(user_id);
         log.info("User with id: " + user_id + " has been deleted");
+    }
+
+    // Permite borrar su cuenta al usuario logueado
+    @PreAuthorize("hasRole('ADMIN') or #username == principal.username")
+    @DeleteMapping("username/{username}")
+    public void delete(@PathVariable("username") String username){
+        userService.deleteByUsername(username);
+        log.info("User " + username + " has been deleted");
     }
 
 

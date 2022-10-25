@@ -122,6 +122,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public void deleteByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            userRepository.delete(user);
+        } else {
+            throw new UsernameNotFoundException("User does not exist");
+        }
+    }
+
+    @Override
     public boolean existsById(Long user_id) {
         return userRepository.existsById(user_id);
     }
