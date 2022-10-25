@@ -32,7 +32,7 @@ public class SportServiceImpl implements SportService {
         sportRepository.findAll().iterator().forEachRemaining(sports::add);
         return sports.stream().map(this::mapDTO).collect(Collectors.toList());
         }catch (Exception e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while getting all sports");
         }
     }
 
@@ -42,15 +42,46 @@ public class SportServiceImpl implements SportService {
         Sport sport = sportRepository.findByName(name);
             return mapDTO(sport);
         }catch (Exception e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while getting sport by name");
         }
     }
 
     /* #################### POST #################### */
 
+    @Override
+    public SportDto save(SportDto sportDto) {
+        try{
+        Sport sport = mapEntity(sportDto);
+        sportRepository.save(sport);
+        return mapDTO(sport);
+        }catch (Exception e){
+            throw new RuntimeException("Error while saving sport");
+        }
+    }
     /* #################### PUT #################### */
 
+    @Override
+    public SportDto update(SportDto sportDto) {
+        return sportRepository.findById(sportDto.getId())
+                .map(sport -> {
+                    sport.setName(sportDto.getName() != null ? sportDto.getName() : sport.getName());
+                    sport.setDescription(sportDto.getDescription() != null ? sportDto.getDescription() : sport.getDescription());
+                    sport.setPhoto(sportDto.getPhoto() != null ? sportDto.getPhoto() : sport.getPhoto());
+                    sportRepository.save(sport);
+                    return mapDTO(sport);
+                }).orElseThrow(() -> new RuntimeException("Error while updating sport"));
+    }
     /* #################### DELETE #################### */
+
+    @Override
+    public void delete(String name) {
+        try{
+        Sport sport = sportRepository.findByName(name);
+        sportRepository.delete(sport);
+        }catch (Exception e){
+            throw new RuntimeException("Error while deleting sport");
+        }
+    }
 
     /* #################### MAPPER #################### */
 
