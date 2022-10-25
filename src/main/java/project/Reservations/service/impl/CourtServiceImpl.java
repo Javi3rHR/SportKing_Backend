@@ -32,26 +32,28 @@ public class CourtServiceImpl implements CourtService {
 
     @Override
     public List<CourtDto> findAll() {
-        try{
+        try {
             List<Court> courts = new ArrayList<>();
             courtRepository.findAll().iterator().forEachRemaining(courts::add);
             return courts.stream().map(this::mapDTO).collect(Collectors.toList());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error while getting all courts");
         }
     }
 
     @Override
-    public CourtDto findBySportIdAndCourtId(Long sport_id ,Long court_id) {
-        if (sportRepository.findById(sport_id).isPresent()) {
-            try{
-                Court court = courtRepository.findBySportIdAndCourtId(sport_id, court_id);
-                return mapDTO(court);
-            }catch (Exception e){
-                throw new RuntimeException("Error while getting court by sport id and court id");
-            }
-        } else {
-            throw new RuntimeException("Sport not found");
+    public CourtDto findBySportIdAndCourtId(Long sport_id, Long court_id) {
+        if (sportRepository.findById(sport_id).isEmpty()) {
+            throw new RuntimeException("Sport does not exist");
+        }
+        if (courtRepository.findById(court_id).isEmpty()) {
+            throw new RuntimeException("Court does not exist");
+        }
+        try {
+            Court court = courtRepository.findBySportIdAndCourtId(sport_id, court_id);
+            return mapDTO(court);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while getting court by sport id and court id");
         }
     }
 
@@ -64,7 +66,7 @@ public class CourtServiceImpl implements CourtService {
             if (checkCourtAlreadyExists(courtDto.getName())) {
                 throw new RuntimeException("Court already exists");
             }
-            if(sportRepository.findById(sport_id).isEmpty()){
+            if (sportRepository.findById(sport_id).isEmpty()) {
                 throw new RuntimeException("Sport does not exist");
             }
             Court court = mapEntity(courtDto);
@@ -80,10 +82,10 @@ public class CourtServiceImpl implements CourtService {
 
     @Override
     public CourtDto update(CourtDto courtDto, Long sport_id) {
-        if(sportRepository.findById(sport_id).isEmpty()){
+        if (sportRepository.findById(sport_id).isEmpty()) {
             throw new RuntimeException("Sport does not exist");
         }
-        if(!courtRepository.existsById(courtDto.getId())){
+        if (!courtRepository.existsById(courtDto.getId())) {
             throw new RuntimeException("Court with id " + courtDto.getId() + " doesn't exist");
         }
         if (checkCourtAlreadyExists(courtDto.getName())) {
@@ -97,8 +99,8 @@ public class CourtServiceImpl implements CourtService {
                     court.setPrice(courtDto.getPrice() != 0 ? courtDto.getPrice() : court.getPrice());
                     court.setTime_intervals(courtDto.getTime_intervals() != null ? courtDto.getTime_intervals() : court.getTime_intervals());
                     courtRepository.save(court);
-                     return mapDTO(court);
-                 }).orElseThrow(() -> new RuntimeException("Court not found"));
+                    return mapDTO(court);
+                }).orElseThrow(() -> new RuntimeException("Court not found"));
     }
 
 
@@ -106,10 +108,10 @@ public class CourtServiceImpl implements CourtService {
 
     @Override
     public void delete(Long court_id) {
-        try{
+        try {
             Court court = courtRepository.findById(court_id).orElseThrow(() -> new RuntimeException("Court not found"));
             courtRepository.delete(court);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error while deleting court");
         }
     }
@@ -141,6 +143,7 @@ public class CourtServiceImpl implements CourtService {
             throw new RuntimeException("Court not mapped.");
         }
     }
+
     // Convierte de DTO a Entidad
     private Court mapEntity(CourtDto sportDto) {
         try {
