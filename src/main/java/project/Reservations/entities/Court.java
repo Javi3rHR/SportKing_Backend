@@ -30,4 +30,5 @@ public class Court {
 
     @OneToMany
     private List<TimeInterval> time_intervals;
+
 }
