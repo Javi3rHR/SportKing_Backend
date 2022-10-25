@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User save(UserDto user) {
 
         User nUser = user.getUserFromDto();
-
+        nUser.setEmail(user.getEmail().toLowerCase());
         if (userRepository.existsByEmail(nUser.getEmail()))
             throw new EmailAlreadyExistsException("Email ocupado");
 
