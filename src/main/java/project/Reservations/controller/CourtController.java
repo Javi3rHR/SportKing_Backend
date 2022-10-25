@@ -29,10 +29,10 @@ public class CourtController {
         return new ResponseEntity<>(courtService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/courts/{id}")
+    @GetMapping("/sport/{sport_id}/court/{court_id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CourtDto> getOne(@PathVariable Long id) {
-        return new ResponseEntity<>(courtService.findById(id), HttpStatus.OK);
+    public ResponseEntity<CourtDto> getBySportIdAndCourtId(@PathVariable(value = "sport_id") Long sport_id, @PathVariable(value = "court_id") Long court_id) {
+        return new ResponseEntity<>(courtService.findBySportIdAndCourtId(sport_id, court_id), HttpStatus.OK);
     }
 
 

@@ -42,12 +42,16 @@ public class CourtServiceImpl implements CourtService {
     }
 
     @Override
-    public CourtDto findById(Long court_id) {
-        try{
-            Court court = courtRepository.findById(court_id).orElseThrow(() -> new RuntimeException("Court not found"));
-            return mapDTO(court);
-        }catch (Exception e){
-            throw new RuntimeException("Error while getting court by id");
+    public CourtDto findBySportIdAndCourtId(Long sport_id ,Long court_id) {
+        if (sportRepository.findById(sport_id).isPresent()) {
+            try{
+                Court court = courtRepository.findBySportIdAndCourtId(sport_id, court_id);
+                return mapDTO(court);
+            }catch (Exception e){
+                throw new RuntimeException("Error while getting court by sport id and court id");
+            }
+        } else {
+            throw new RuntimeException("Sport not found");
         }
     }
 

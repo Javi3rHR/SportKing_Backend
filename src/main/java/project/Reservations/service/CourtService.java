@@ -5,7 +5,8 @@ import project.Reservations.dto.court.CourtDto;
 import java.util.List;
 
 public interface CourtService {
-    CourtDto findById(Long court_id);
+//    CourtDto findById(Long court_id);
+    CourtDto findBySportIdAndCourtId(Long sport_id, Long court_id);
     List<CourtDto> findAll();
     void delete(Long court_id);
     CourtDto save(CourtDto courtDto, Long sport_id);
