@@ -10,7 +10,7 @@ public class SportDto {
 
         private long id;
         @NotNull(message = "Name is required")
-        private String name;
+        private String sport_name;
         private String description;
         private String photo;
 

@@ -37,9 +37,9 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public SportDto findByName(String name) {
+    public SportDto findByName(String sport_name) {
         try{
-        Sport sport = sportRepository.findByName(name);
+        Sport sport = sportRepository.findBySportName(sport_name);
             return mapDTO(sport);
         }catch (Exception e){
             throw new RuntimeException("Error while getting sport by name");
@@ -50,6 +50,9 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public SportDto save(SportDto sportDto) {
+        if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
+            throw new RuntimeException("Sport with name '" + sportDto.getSport_name() + "' already exists");
+        }
         try{
         Sport sport = mapEntity(sportDto);
         sportRepository.save(sport);
@@ -62,9 +65,12 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public SportDto update(SportDto sportDto) {
+        if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
+            throw new RuntimeException("Sport with name '" + sportDto.getSport_name() + "' already exists");
+        }
         return sportRepository.findById(sportDto.getId())
                 .map(sport -> {
-                    sport.setName(sportDto.getName() != null ? sportDto.getName() : sport.getName());
+                    sport.setSport_name(sportDto.getSport_name() != null ? sportDto.getSport_name() : sport.getSport_name());
                     sport.setDescription(sportDto.getDescription() != null ? sportDto.getDescription() : sport.getDescription());
                     sport.setPhoto(sportDto.getPhoto() != null ? sportDto.getPhoto() : sport.getPhoto());
                     sportRepository.save(sport);
@@ -74,9 +80,9 @@ public class SportServiceImpl implements SportService {
     /* #################### DELETE #################### */
 
     @Override
-    public void delete(String name) {
+    public void delete(Long sport_id) {
         try{
-        Sport sport = sportRepository.findByName(name);
+        Sport sport = sportRepository.findById(sport_id).orElseThrow(() -> new RuntimeException("Sport with id '" + sport_id + "' not found"));
         sportRepository.delete(sport);
         }catch (Exception e){
             throw new RuntimeException("Error while deleting sport");

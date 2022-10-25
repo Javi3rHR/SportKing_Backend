@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface SportService {
     List<SportDto> findAll();
-    SportDto findByName(String name);
+    SportDto findByName(String sport_name);
     SportDto save(SportDto sportDto);
     SportDto update(SportDto sportDto);
-    void delete(String name);
+    void delete(Long sport_id);
 }

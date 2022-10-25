@@ -19,7 +19,7 @@ public class Sport {
 
     @Column(name = "sport_name", length = 50)
     @Size(max = 50, message = "Max length is 50")
-    private String name;
+    private String sport_name;
 
     @Column(name = "sport_description", length = 244)
     @Size(max = 244, message = "Max length is 244")
