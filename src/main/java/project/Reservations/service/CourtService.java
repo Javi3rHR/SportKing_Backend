@@ -8,8 +8,8 @@ public interface CourtService {
     CourtDto findById(Long court_id);
     List<CourtDto> findAll();
     void delete(Long court_id);
-    CourtDto save(CourtDto courtDto);
-    CourtDto update(Long court_id, CourtDto courtDto);
+    CourtDto save(CourtDto courtDto, Long sport_id);
+    CourtDto update(CourtDto courtDto, Long sport_id);
     boolean checkCourtAlreadyExists(String court_name);
     List<CourtDto> setAvailableTimes(List<CourtDto> CourtRequestDto);
 }
