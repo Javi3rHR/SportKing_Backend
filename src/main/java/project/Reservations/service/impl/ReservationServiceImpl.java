@@ -7,6 +7,7 @@ import project.Reservations.dto.reservation.ReservationDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 import project.Reservations.exception.ResourceNotFoundException;
+import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.service.ReservationService;
 import project.Users.entities.User;
@@ -24,12 +25,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final UserRepository userRepository;
 
+    private final CourtRepository courtRepository;
+
     private final ModelMapper modelMapper;
 
     /* Inyección de dependencias */
-    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, CourtRepository courtRepository, ModelMapper modelMapper) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
+        this.courtRepository = courtRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -99,15 +103,11 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### POST #################### */
     @Override
     public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
-        Reservation reservation = mapEntity(reservationDTO);
         User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
+        Reservation reservation = mapEntity(reservationDTO);
         reservation.setUser(user);
         // TODO comprobar que funciona y retocar una vez tenga datos
-//        if (checkReservationAlreadyExists(reservation.getCourt().getCourt_id(), reservation.getDate(), reservation.getTime_interval().getStart_time())) {
-//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation already exists.");
-//        }
-//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
         // Comprobar formato de fecha
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -126,6 +126,7 @@ public class ReservationServiceImpl implements ReservationService {
         String reservationDate = sdf.format(reservation.getDate());
         Date todayDate = null;
         Date reservationDateDate = null;
+
         try {
             todayDate = sdf.parse(today);
             reservationDateDate = sdf.parse(reservationDate);
@@ -136,8 +137,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException("Reservation date '"+reservationDate+"' must be after today's date '"+today+"'.");
         }
 
-        Reservation newReservation = reservationRepository.save(reservation);
-        return mapDTO(newReservation);
+        reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", reservationDTO.getCourt_id())));
+
+        // Comprobar que la hora de inicio no sea posterior a la hora de fin
+//        if (reservation.getStartTime().after(reservation.getEndTime())) {
+//            throw new RuntimeException("Start time '"+reservation.getStartTime()+"' must be before end time '"+reservation.getEndTime()+"'.");
+//        }
+        return mapDTO(reservationRepository.save(reservation));
     }
 
     /* #################### DELETE #################### */

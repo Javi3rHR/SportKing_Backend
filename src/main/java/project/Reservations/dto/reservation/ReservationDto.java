@@ -16,6 +16,7 @@ import java.util.Date;
 public class ReservationDto {
 
     private long id;
+    private long court_id;
 
     @NotEmpty(message = "User is required")
     private User user;
