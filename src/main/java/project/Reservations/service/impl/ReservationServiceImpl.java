@@ -88,6 +88,27 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+//    @Override
+//    public ReservationResponseDto findByIdAndUserUsername(Long reservation_id, String username) {
+//        User user = userRepository.findByUsername(username);
+//        if (user == null) {
+//            throw new RuntimeException("User not found.");
+//        }
+//        try {
+//            Reservation reservation = reservationRepository.findByIdAndUserUsername(reservation_id, username);
+//
+//            ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
+//            reservationResponse.setUser_id(user.getUser_id());
+//            reservationResponse.setUsername(user.getUsername());
+//            reservationResponse.setEmail(user.getEmail());
+//            reservationResponse.setPhone(user.getPhone());
+//
+//            return reservationResponse;
+//        } catch (Exception e) {
+//            throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
+//        }
+//    }
+
     @Override
     public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
         try {
@@ -107,7 +128,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         Reservation reservation = mapEntity(reservationDTO);
         reservation.setUser(user);
-        // TODO comprobar que funciona y retocar una vez tenga datos
 
         // Comprobar formato de fecha
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

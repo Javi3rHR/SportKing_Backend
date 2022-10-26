@@ -30,13 +30,15 @@ public class ReservationController {
     }
 
     @GetMapping("/users/{user_id}/reservations")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     public ResponseEntity<List<ReservationResponseDto>> getAllByUserId(@PathVariable("user_id") Long user_id) {
         return new ResponseEntity<>(reservationService.findByUserUserId(user_id), HttpStatus.OK);
     }
 
+
+
     @GetMapping("/users/{user_id}/reservations/{reservation_id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     public ResponseEntity<ReservationResponseDto> getByIdAndUserId(@PathVariable("user_id") Long user_id, @PathVariable("reservation_id") Long reservation_id) {
         return new ResponseEntity<>(reservationService.findByIdAndUserUserId(reservation_id, user_id), HttpStatus.OK);
     }
@@ -45,7 +47,7 @@ public class ReservationController {
     /* #################### POST #################### */
 
     @PostMapping("/users/{user_id}/reservations")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     public ResponseEntity<ReservationDto> makeReservation(@PathVariable("user_id") Long user_id, @Valid @RequestBody ReservationDto reservationDTO) {
         return new ResponseEntity<>(reservationService.save(user_id, reservationDTO), HttpStatus.CREATED);
     }
@@ -60,7 +62,7 @@ public class ReservationController {
         return new ResponseEntity<>("Reservation with id '"+reservation_id+"' has been deleted", HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @DeleteMapping("/users/{user_id}/reservations/{reservation_id}")
     public ResponseEntity<String> cancelReservation(@PathVariable(value = "user_id") Long user_id, @PathVariable(value = "reservation_id") Long reservation_id) {
         reservationService.delete(user_id, reservation_id);

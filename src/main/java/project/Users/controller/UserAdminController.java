@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import project.Users.dto.UserDto;
 import project.Users.entities.User;
 import project.Users.service.UserService;
+import project.Users.service.impl.AuthenticatedUserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserAdminController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public UserAdminController(UserService userService) {
+    public UserAdminController(UserService userService, AuthenticatedUserService authenticatedUserService) {
         this.userService = userService;
     }
 
@@ -43,9 +44,10 @@ public class UserAdminController {
         return new ResponseEntity<>(userService.findByUsername(username), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @GetMapping("/{user_id}")
     public ResponseEntity<User> getById(@PathVariable("user_id") Long user_id){
+        log.info("User id: " + user_id);
         if(userService.findByUserId(user_id) == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -53,7 +55,7 @@ public class UserAdminController {
     }
 
     /* #################### PUT #################### */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @PutMapping("/{user_id}")
     public ResponseEntity<User> update(@PathVariable(value = "user_id") Long user_id, @Valid @RequestBody UserDto user){
         if(userService.update(user_id, user) == null){
@@ -64,7 +66,7 @@ public class UserAdminController {
 
 
     /* #################### DELETE #################### */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @DeleteMapping("/{user_id}")
     public void delete(@PathVariable("user_id") Long user_id){
         userService.delete(user_id);

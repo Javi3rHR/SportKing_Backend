@@ -11,11 +11,15 @@ import java.util.Optional;
 public interface ReservationService {
     List<ReservationResponseDto> findAll();
     List<ReservationResponseDto> findByUserUserId(Long user_id);
+
     List<ReservationResponseDto> findByCourtCourtId(Long court_id);
     ReservationDto save(Long user_id, ReservationDto ReservationDTO);
     void delete(Long user_id, Long reservation_id);
     void deleteWithAdmin(Long reservation_id);
     ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id);
+//    ReservationResponseDto findByIdAndUserUsername(Long reservation_id, String username);
     Optional<Reservation> findById(Long reservation_id);
     boolean checkReservationAlreadyExists(Long court_id, String reservation_date, String start_time);
+
+
 }

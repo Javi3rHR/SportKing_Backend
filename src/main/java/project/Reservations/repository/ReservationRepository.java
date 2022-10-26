@@ -32,6 +32,11 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
             "AND user_id = :user_id", nativeQuery = true)
     Reservation findByIdAndUserUserId(Long reservation_id, Long user_id);
 
+    @Query(value = "SELECT * FROM reservation " +
+            "WHERE reservation_id = :reservation_id " +
+            "AND username = :username", nativeQuery = true)
+    Reservation findByIdAndUserUsername(Long reservation_id, String username);
+
     @Query(value = "SELECT reservation_date, court_id, time_interval_id, paid " +
             "FROM Reservation WHERE start_time = :start_time " +
             "AND reservation_date = :reservation_date", nativeQuery = true)
@@ -44,6 +49,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     /* Reservas pendientes de pagar */
     @Query(value = "SELECT * FROM reservation WHERE paid = false", nativeQuery = true)
     List<Reservation> findByPaidIsFalse(boolean paid);
+
+
 
 
     /* #### DELETE #### */
