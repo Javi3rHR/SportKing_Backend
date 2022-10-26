@@ -17,10 +17,6 @@ public class TimeInterval {
     @Column(name = "time_interval_id")
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "court_id")
-    private Court court;
-
     /* 9:00 - 10:30 */
     @Column
     @JsonFormat(pattern="HH:mm")
@@ -29,5 +25,9 @@ public class TimeInterval {
     @JsonFormat(pattern="HH:mm")
     @Column
     private String end_time;
+
+    @ManyToOne
+    @JoinColumn(name = "court_id")
+    private Court court;
 
 }

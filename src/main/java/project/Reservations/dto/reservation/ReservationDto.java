@@ -23,6 +23,8 @@ public class ReservationDto {
 
     @NotEmpty(message = "Court is required")
     private Court court;
+
+    @NotEmpty(message = "Time interval is required")
     private TimeInterval time_interval;
 
     @NotNull(message = "Date is required")

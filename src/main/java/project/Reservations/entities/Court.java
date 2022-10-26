@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Table(name = "court")
@@ -27,8 +26,5 @@ public class Court {
 
     @Column(name = "court_price")
     private double price;
-
-    @OneToMany
-    private List<TimeInterval> time_intervals;
 
 }
