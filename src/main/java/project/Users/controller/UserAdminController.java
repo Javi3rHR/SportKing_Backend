@@ -24,7 +24,9 @@ public class UserAdminController {
         this.userService = userService;
     }
 
+
     /* #################### GET #################### */
+
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAll(){
@@ -53,7 +55,9 @@ public class UserAdminController {
         return new ResponseEntity<>(userService.findByUserId(user_id), HttpStatus.OK);
     }
 
+
     /* #################### PUT #################### */
+
     @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @PutMapping("/{user_id}")
     public ResponseEntity<User> update(@PathVariable(value = "user_id") Long user_id, @Valid @RequestBody UserDto user){
@@ -65,21 +69,21 @@ public class UserAdminController {
 
 
     /* #################### DELETE #################### */
+
     @PreAuthorize("hasRole('ADMIN') or @authenticatedUserService.hasId(#user_id)")
     @DeleteMapping("/{user_id}")
-    public void delete(@PathVariable("user_id") Long user_id){
+    public ResponseEntity<String> delete(@PathVariable("user_id") Long user_id){
         userService.delete(user_id);
         log.info("User with id: " + user_id + " has been deleted");
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
     // Permite borrar su cuenta al usuario logueado
     @PreAuthorize("hasRole('ADMIN') or #username == principal.username")
     @DeleteMapping("username/{username}")
-    public void delete(@PathVariable("username") String username){
+    public ResponseEntity<String> delete(@PathVariable("username") String username){
         userService.deleteByUsername(username);
         log.info("User " + username + " has been deleted");
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
-
-
-
 }

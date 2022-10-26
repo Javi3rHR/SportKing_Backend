@@ -1,12 +1,14 @@
 package project.Users.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import project.Users.dto.UserDto;
 import project.Users.entities.Role;
 import project.Users.entities.User;
@@ -34,7 +36,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid username or password");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
     }
@@ -52,7 +54,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     /* Comprueba que Username y Email están libres y crea la cuenta */
     @Override
     public User save(UserDto user) {
-
         User nUser = user.getUserFromDto();
         nUser.setEmail(user.getEmail().toLowerCase());
         if (userRepository.existsByEmail(nUser.getEmail()))
@@ -81,9 +82,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     /* #################### CRUD #################### */
 
     public List<User> findAll() {
+        try{
         List<User> list = new ArrayList<>();
         userRepository.findAll().iterator().forEachRemaining(list::add);
         return list;
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "There are no users");
+        }
     }
     @Override
     public User findByUsername(String username) {
@@ -92,7 +97,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User findByUserId(Long user_id) {
-        return userRepository.findByUserId(user_id);
+        try {
+            return userRepository.findByUserId(user_id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
     }
 
 
@@ -107,7 +116,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             nUser.setName(user.getName() != null ? user.getName() : nUser.getName());
             return userRepository.save(nUser);
         } else {
-            throw new UsernameNotFoundException("User does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
     }
 
@@ -117,7 +126,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (user != null) {
             userRepository.delete(user);
         } else {
-            throw new UsernameNotFoundException("User does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
     }
 
@@ -127,7 +136,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (user != null) {
             userRepository.delete(user);
         } else {
-            throw new UsernameNotFoundException("User does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
         }
     }
 

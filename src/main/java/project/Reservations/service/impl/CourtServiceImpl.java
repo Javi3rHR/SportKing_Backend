@@ -1,7 +1,9 @@
 package project.Reservations.service.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import project.Reservations.dto.court.CourtDto;
 import project.Reservations.entities.Court;
 import project.Reservations.repository.CourtRepository;
@@ -37,23 +39,23 @@ public class CourtServiceImpl implements CourtService {
             courtRepository.findAll().iterator().forEachRemaining(courts::add);
             return courts.stream().map(this::mapDTO).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new RuntimeException("Error while getting all courts");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting all courts");
         }
     }
 
     @Override
     public CourtDto findBySportIdAndCourtId(Long sport_id, Long court_id) {
         if (sportRepository.findById(sport_id).isEmpty()) {
-            throw new RuntimeException("Sport does not exist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Sport does not exist");
         }
         if (courtRepository.findById(court_id).isEmpty()) {
-            throw new RuntimeException("Court does not exist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Court does not exist");
         }
         try {
             Court court = courtRepository.findBySportIdAndCourtId(sport_id, court_id);
             return mapDTO(court);
         } catch (Exception e) {
-            throw new RuntimeException("Error while getting court by sport id and court id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting court by sport id and court id");
         }
     }
 
@@ -64,16 +66,16 @@ public class CourtServiceImpl implements CourtService {
     public CourtDto save(CourtDto courtDto, Long sport_id) {
         try {
             if (checkCourtAlreadyExists(courtDto.getName())) {
-                throw new RuntimeException("Court already exists");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Court already exists");
             }
             if (sportRepository.findById(sport_id).isEmpty()) {
-                throw new RuntimeException("Sport does not exist");
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Sport does not exist");
             }
             Court court = mapEntity(courtDto);
             court.setSport(sportRepository.findById(sport_id).get());
             return mapDTO(courtRepository.save(court));
         } catch (Exception e) {
-            throw new RuntimeException("Error while saving court");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while saving court");
         }
     }
 
@@ -83,22 +85,22 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public CourtDto update(CourtDto courtDto, Long sport_id) {
         if (sportRepository.findById(sport_id).isEmpty()) {
-            throw new RuntimeException("Sport does not exist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Sport does not exist");
         }
         if (!courtRepository.existsById(courtDto.getId())) {
-            throw new RuntimeException("Court with id " + courtDto.getId() + " doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Court with id " + courtDto.getId() + " doesn't exist");
         }
         if (checkCourtAlreadyExists(courtDto.getName())) {
-            throw new RuntimeException("Court with name " + courtDto.getName() + " already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Court with name " + courtDto.getName() + " already exists");
         }
         if (courtRepository.findById(courtDto.getId()).get().getSport().getId() != sport_id) {
-            throw new RuntimeException("Court with id " + courtDto.getId() + " doesn't belong to sport with id " + sport_id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Court with id " + courtDto.getId() + " doesn't belong to sport with id " + sport_id);
         }
         return courtRepository.findById(courtDto.getId()).map(court -> {
             court.setName(courtDto.getName() != null ? courtDto.getName() : court.getName());
             court.setPrice(courtDto.getPrice() != 0 ? courtDto.getPrice() : court.getPrice());
             return mapDTO(courtRepository.save(court));
-        }).orElseThrow(() -> new RuntimeException("Error while updating court"));
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while updating court"));
     }
 
 
@@ -107,10 +109,10 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public void delete(Long court_id) {
         try {
-            Court court = courtRepository.findById(court_id).orElseThrow(() -> new RuntimeException("Court not found"));
+            Court court = courtRepository.findById(court_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not found"));
             courtRepository.delete(court);
         } catch (Exception e) {
-            throw new RuntimeException("Error while deleting court");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while deleting court");
         }
     }
 
@@ -138,7 +140,7 @@ public class CourtServiceImpl implements CourtService {
         try {
             return modelMapper.map(court, CourtDto.class);
         } catch (Exception e) {
-            throw new RuntimeException("Court not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not mapped.");
         }
     }
 
@@ -147,7 +149,7 @@ public class CourtServiceImpl implements CourtService {
         try {
             return modelMapper.map(sportDto, Court.class);
         } catch (Exception e) {
-            throw new RuntimeException("Court not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not mapped.");
         }
     }
 }

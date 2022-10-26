@@ -1,7 +1,9 @@
 package project.Reservations.service.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import project.Reservations.dto.sport.SportDto;
 import project.Reservations.entities.Sport;
 import project.Reservations.repository.SportRepository;
@@ -32,7 +34,7 @@ public class SportServiceImpl implements SportService {
         sportRepository.findAll().iterator().forEachRemaining(sports::add);
         return sports.stream().map(this::mapDTO).collect(Collectors.toList());
         }catch (Exception e){
-            throw new RuntimeException("Error while getting all sports");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting all sports");
         }
     }
 
@@ -42,17 +44,17 @@ public class SportServiceImpl implements SportService {
         Sport sport = sportRepository.findBySportName(sport_name);
             return mapDTO(sport);
         }catch (Exception e){
-            throw new RuntimeException("Error while getting sport by name");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting sport by name");
         }
     }
 
     @Override
     public SportDto findById(Long id) {
         try{
-        Sport sport = sportRepository.findById(id).orElseThrow(() -> new RuntimeException("Sport not found"));
+        Sport sport = sportRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not found"));
             return mapDTO(sport);
         }catch (Exception e){
-            throw new RuntimeException("Error while getting sport by id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting sport by id");
         }
     }
 
@@ -61,14 +63,14 @@ public class SportServiceImpl implements SportService {
     @Override
     public SportDto save(SportDto sportDto) {
         if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
-            throw new RuntimeException("Sport with name '" + sportDto.getSport_name() + "' already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Sport with name '" + sportDto.getSport_name() + "' already exists");
         }
         try{
         Sport sport = mapEntity(sportDto);
         sportRepository.save(sport);
         return mapDTO(sport);
         }catch (Exception e){
-            throw new RuntimeException("Error while saving sport");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while saving sport");
         }
     }
     /* #################### PUT #################### */
@@ -76,10 +78,10 @@ public class SportServiceImpl implements SportService {
     @Override
     public SportDto update(SportDto sportDto) {
         if (!sportRepository.existsById(sportDto.getId())) {
-            throw new RuntimeException("Sport with id '" + sportDto.getId() + "' doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Sport with id '" + sportDto.getId() + "' doesn't exist");
         }
         if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
-            throw new RuntimeException("Sport with name '" + sportDto.getSport_name() + "' already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Sport with name '" + sportDto.getSport_name() + "' already exists");
         }
         return sportRepository.findById(sportDto.getId())
                 .map(sport -> {
@@ -88,17 +90,21 @@ public class SportServiceImpl implements SportService {
                     sport.setPhoto(sportDto.getPhoto() != null ? sportDto.getPhoto() : sport.getPhoto());
                     sportRepository.save(sport);
                     return mapDTO(sport);
-                }).orElseThrow(() -> new RuntimeException("Error while updating sport"));
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while updating sport"));
     }
     /* #################### DELETE #################### */
 
     @Override
     public void delete(Long sport_id) {
         try{
-        Sport sport = sportRepository.findById(sport_id).orElseThrow(() -> new RuntimeException("Sport with id '" + sport_id + "' not found"));
+        Sport sport = sportRepository.findById(sport_id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Sport with id '" + sport_id + "' not found"
+                ));
         sportRepository.delete(sport);
         }catch (Exception e){
-            throw new RuntimeException("Error while deleting sport");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while deleting sport");
         }
     }
 
@@ -109,7 +115,7 @@ public class SportServiceImpl implements SportService {
         try {
             return modelMapper.map(sport, SportDto.class);
         } catch (Exception e) {
-            throw new RuntimeException("Sport not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not mapped.");
         }
     }
     // Convierte de DTO a Entidad
@@ -117,7 +123,7 @@ public class SportServiceImpl implements SportService {
         try {
             return modelMapper.map(sportDto, Sport.class);
         } catch (Exception e) {
-            throw new RuntimeException("Sport not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not mapped.");
         }
     }
 }

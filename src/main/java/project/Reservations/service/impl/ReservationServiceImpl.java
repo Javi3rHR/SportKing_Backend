@@ -2,7 +2,9 @@ package project.Reservations.service.impl;
 
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import project.Reservations.dto.reservation.ReservationDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
@@ -47,7 +49,7 @@ public class ReservationServiceImpl implements ReservationService {
             setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
         } catch (Exception e) {
-            throw new RuntimeException("List of reservations not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "List of reservations not found.");
             // TODO probar si se puede throw responseentity
 //            throw new ResponseEntity<>("List of reservations not found.", HttpStatus.NOT_FOUND);
         }
@@ -140,7 +142,7 @@ public class ReservationServiceImpl implements ReservationService {
         sdf.format(calendar.getTime());
         reservation.setDate(calendar.getTime());
         }catch (Exception e){
-            throw new RuntimeException("Date format is not correct.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Date format is not correct.");
         }
 
         // Comprobar que la fecha no sea anterior a la actual
@@ -156,7 +158,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException(e);
         }
         if (reservationDateDate.before(todayDate)) {
-            throw new RuntimeException("Reservation date '"+reservationDate+"' must be after today's date '"+today+"'.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '"+reservationDate+"' must be after today's date '"+today+"'.");
         }
 
         reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
@@ -179,13 +181,13 @@ public class ReservationServiceImpl implements ReservationService {
                     .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
             if (reservation.getUser().getUser_id() != user.getUser_id()) {
                 System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
-                throw new RuntimeException("Reservation does not belong to user");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation does not belong to user");
             } else {
                 System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
                 reservationRepository.delete(reservation);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not deleted.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not deleted.");
         }
     }
 
@@ -197,7 +199,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             reservationRepository.delete(reservation);
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not deleted.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not deleted.");
         }
     }
 
@@ -215,7 +217,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservation, ReservationDto.class);
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not mapped.");
         }
     }
 
@@ -223,7 +225,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservation, ReservationResponseDto.class);
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not mapped.");
         }
     }
 
@@ -232,7 +234,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             return modelMapper.map(reservationDTO, Reservation.class);
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not mapped.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not mapped.");
         }
     }
 
@@ -273,18 +275,7 @@ public class ReservationServiceImpl implements ReservationService {
             List<Reservation> reservations = reservationRepository.findByCourtCourtIdAndDateAndTimeIntervalStartTime(court_id, reservation_date, start_time);
             return reservations.size() > 0;
         } catch (Exception e) {
-            throw new RuntimeException("Reservation not checked.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not checked.");
         }
     }
-
-//    public boolean checkReservationDateAfterToday(String reservation_date) {
-//        try {
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            Date date = sdf.parse(reservation_date);
-//            Date today = new Date();
-//            return date.after(today);
-//        } catch (Exception e) {
-//            throw new AppException(HttpStatus.BAD_REQUEST, "Reservation not checked.");
-//        }
-//    }
 }
