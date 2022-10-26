@@ -91,16 +91,14 @@ public class CourtServiceImpl implements CourtService {
         if (checkCourtAlreadyExists(courtDto.getName())) {
             throw new RuntimeException("Court with name " + courtDto.getName() + " already exists");
         }
-        try {
-            Court court = mapEntity(courtDto);
-            sportRepository.findById(sport_id).get();
+        if (courtRepository.findById(courtDto.getId()).get().getSport().getId() != sport_id) {
+            throw new RuntimeException("Court with id " + courtDto.getId() + " doesn't belong to sport with id " + sport_id);
+        }
+        return courtRepository.findById(courtDto.getId()).map(court -> {
             court.setName(courtDto.getName() != null ? courtDto.getName() : court.getName());
             court.setPrice(courtDto.getPrice() != 0 ? courtDto.getPrice() : court.getPrice());
-            court.setSport(sportRepository.findById(sport_id).get());
             return mapDTO(courtRepository.save(court));
-        } catch (Exception e) {
-            throw new RuntimeException("Error while updating court");
-        }
+        }).orElseThrow(() -> new RuntimeException("Error while updating court"));
     }
 
 
