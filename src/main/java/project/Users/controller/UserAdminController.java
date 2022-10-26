@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import project.Users.dto.UserDto;
 import project.Users.entities.User;
 import project.Users.service.UserService;
-import project.Users.service.impl.AuthenticatedUserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,7 +20,7 @@ public class UserAdminController {
 
     private final UserService userService;
 
-    public UserAdminController(UserService userService, AuthenticatedUserService authenticatedUserService) {
+    public UserAdminController(UserService userService) {
         this.userService = userService;
     }
 

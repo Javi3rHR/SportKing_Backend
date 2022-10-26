@@ -48,6 +48,8 @@ public class ReservationServiceImpl implements ReservationService {
             return reservationResponse;
         } catch (Exception e) {
             throw new RuntimeException("List of reservations not found.");
+            // TODO probar si se puede throw responseentity
+//            throw new ResponseEntity<>("List of reservations not found.", HttpStatus.NOT_FOUND);
         }
     }
 
