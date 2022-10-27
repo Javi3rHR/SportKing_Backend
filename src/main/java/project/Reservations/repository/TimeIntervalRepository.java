@@ -6,7 +6,8 @@ import project.Reservations.entities.TimeInterval;
 
 public interface TimeIntervalRepository extends CrudRepository<TimeInterval, Long> {
 
-    @Query(value = "SELECT DISTINCT 1 FROM time_interval " +
+    @Query(value = "SELECT DISTINCT 1 " +
+            "FROM time_interval " +
             "WHERE court_id = :court_id " +
             "AND start_time = :start_time " +
             "AND end_time = :end_time", nativeQuery = true)

@@ -19,7 +19,4 @@ public interface ReservationService {
     ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id);
 //    ReservationResponseDto findByIdAndUserUsername(Long reservation_id, String username);
     Optional<Reservation> findById(Long reservation_id);
-    boolean checkReservationAlreadyExists(Long court_id, String reservation_date, String start_time);
-
-
 }

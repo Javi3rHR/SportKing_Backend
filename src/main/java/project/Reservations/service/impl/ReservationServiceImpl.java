@@ -140,7 +140,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setUser(user);
 
         // Comprobar formato de fecha
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
 
         try {
@@ -167,16 +167,17 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '" + reservationDate + "' must be after today's date '" + today + "'.");
         }
 
-//        reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
-//                .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", reservationDTO.getCourt_id())));
-
         reservation.setTime_interval(timeIntervalRepository.findById(reservationDTO.getTime_interval_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Time interval", "time_interval_id", reservationDTO.getTime_interval_id())));
 
-        // Comprobar que la hora de inicio no sea posterior a la hora de fin
-//        if (reservation.getStartTime().after(reservation.getEndTime())) {
-//            throw new RuntimeException("Start time '"+reservation.getStartTime()+"' must be before end time '"+reservation.getEndTime()+"'.");
-//        }
+        Long time_interval_id = reservationDTO.getTime_interval_id();
+
+        // Comprobar que la pista no está reservada en ese horario
+        if((reservationRepository.checkIfReservationExists(
+                reservationDateDate,
+                time_interval_id)) != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation already exists.");
+        }
         return mapDTO(reservationRepository.save(reservation));
     }
 
@@ -286,18 +287,4 @@ public class ReservationServiceImpl implements ReservationService {
             setUserDetails(user_id, reservationResponse);
         }
     }
-
-    /* #################### CHECK #################### */
-    /* Comprueba si una pista está disponible para reservar */
-    @Override
-    public boolean checkReservationAlreadyExists(Long court_id, String reservation_date, String start_time) {
-        try {
-            List<Reservation> reservations = reservationRepository.findByCourtCourtIdAndDateAndTimeIntervalStartTime(court_id, reservation_date, start_time);
-            return reservations.size() > 0;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not checked.");
-        }
-    }
-
-
 }

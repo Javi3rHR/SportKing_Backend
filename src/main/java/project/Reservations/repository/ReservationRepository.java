@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import project.Reservations.entities.Reservation;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,11 +19,18 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     List<Reservation> findByCourtCourtId(Long court_id);
 
     // InnerJoin con TimeInterval para sacar start_time
-    @Query(value = "SELECT court_id, reservation_date, start_time " +
+    @Query(value = "SELECT * " +
+            "FROM reservation r" +
+            "INNER JOIN time_interval t" +
+            "ON r.time_interval_id = t.time_interval_id" +
+            "WHERE r.court_id = :court_id AND r.reservation_date = :reservation_date AND t.start_time = :start_time", nativeQuery = true)
+    Object findByCourtCourtIdAndDateAndTimeIntervalStartTime(Long court_id, String reservation_date, String start_time);
+
+    @Query(value = "SELECT * " +
             "FROM reservation " +
-            "INNER JOIN time_interval" +
-            "ON time_interval_id.reservation = time_interval_id.time_interval", nativeQuery = true)
-    List<Reservation> findByCourtCourtIdAndDateAndTimeIntervalStartTime(Long court_id, String reservation_date, String start_time);
+            "WHERE reservation_date = :reservation_date " +
+            "AND time_interval_id = :time_interval_id ", nativeQuery = true)
+    Object checkIfReservationExists(Date reservation_date, Long time_interval_id);
 
     @Query(value = "SELECT * FROM reservation WHERE user_id = :user_id", nativeQuery = true)
     List<Reservation> findByUserUserId(Long user_id);

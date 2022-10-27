@@ -77,7 +77,6 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
                 court_id,
                 timeIntervalDto.getStart_time(),
                 timeIntervalDto.getEnd_time())) != null) {
-            // TODO REVISAR ERROR
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Time interval already exists");
         }
         if (timeIntervalDto.getStart_time().equals(timeIntervalDto.getEnd_time())) {

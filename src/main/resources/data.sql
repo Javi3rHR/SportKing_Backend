@@ -33,3 +33,6 @@ INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('12:00', '13:
 INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('09:00', '10:30', 3);
 INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('10:30', '12:00', 3);
 INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('12:00', '13:30', 3);
+
+-- Default Reservations
+INSERT INTO reservation (user_id, time_interval_id, reservation_date) VALUES (3, 1, '2022-10-30');
