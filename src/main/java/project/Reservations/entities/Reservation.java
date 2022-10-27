@@ -29,9 +29,9 @@ public class Reservation {
     @JsonIgnore
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "court_id", referencedColumnName = "court_id")
-    private Court court;
+//    @OneToOne
+//    @JoinColumn(name = "court_id", referencedColumnName = "court_id")
+//    private Court court;
 
     @OneToOne
     @JoinColumn(name = "time_interval_id", referencedColumnName = "time_interval_id")

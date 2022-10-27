@@ -45,19 +45,11 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
     public TimeIntervalDto save(Long court_id, TimeIntervalDto timeIntervalDto) {
         Court court = courtRepository.findById(court_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", court_id));
-        if (timeIntervalDto.getStart_time().equals(timeIntervalDto.getEnd_time())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time and end time must be different");
+
+        if(!timeIntervalIsValid(court_id, timeIntervalDto)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time interval is not valid");
         }
-        if (timeIntervalDto.getStart_time().compareTo(timeIntervalDto.getEnd_time()) > 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time must be before end time");
-        }
-        if ((timeIntervalRepository.existsByCourtCourtIdAndStart_timeAndEnd_time(
-                court_id,
-                timeIntervalDto.getStart_time(),
-                timeIntervalDto.getEnd_time())) != null) {
-            // TODO REVISAR ERROR
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Time interval already exists");
-        }
+
         try {
             TimeInterval timeInterval = mapEntity(timeIntervalDto);
             timeInterval.setStart_time(timeIntervalDto.getStart_time());
@@ -80,6 +72,22 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     /* #################### OTHER #################### */
 
+    public Boolean timeIntervalIsValid(Long court_id, TimeIntervalDto timeIntervalDto) {
+        if ((timeIntervalRepository.existsByCourtCourtIdAndStart_timeAndEnd_time(
+                court_id,
+                timeIntervalDto.getStart_time(),
+                timeIntervalDto.getEnd_time())) != null) {
+            // TODO REVISAR ERROR
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Time interval already exists");
+        }
+        if (timeIntervalDto.getStart_time().equals(timeIntervalDto.getEnd_time())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time and end time must be different");
+        }
+        if (timeIntervalDto.getStart_time().compareTo(timeIntervalDto.getEnd_time()) > 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time must be before end time");
+        }
+        return true;
+    }
 
     // TODO
     @Override

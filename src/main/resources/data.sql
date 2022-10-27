@@ -23,3 +23,13 @@ INSERT INTO court (court_name, sport_id, court_price) VALUES ('Baloncesto 2', 2,
 INSERT INTO court (court_name, sport_id, court_price) VALUES ('Padel 1', 3, 10);
 INSERT INTO court (court_name, sport_id, court_price) VALUES ('Padel 2', 3, 10);
 
+-- Default Time Intervals
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('09:00', '10:30', 1);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('10:30', '12:00', 1);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('12:00', '13:30', 1);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('09:00', '10:30', 2);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('10:30', '12:00', 2);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('12:00', '13:30', 2);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('09:00', '10:30', 3);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('10:30', '12:00', 3);
+INSERT INTO time_interval (start_time, end_time, court_id) VALUES ('12:00', '13:30', 3);

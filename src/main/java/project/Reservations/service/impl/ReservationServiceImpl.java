@@ -132,8 +132,10 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### POST #################### */
     @Override
     public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
+
         User user = userRepository.findById(user_id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
+
         Reservation reservation = mapEntity(reservationDTO);
         reservation.setUser(user);
 
@@ -165,8 +167,8 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '" + reservationDate + "' must be after today's date '" + today + "'.");
         }
 
-        reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
-                .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", reservationDTO.getCourt_id())));
+//        reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
+//                .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", reservationDTO.getCourt_id())));
 
         reservation.setTime_interval(timeIntervalRepository.findById(reservationDTO.getTime_interval_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Time interval", "time_interval_id", reservationDTO.getTime_interval_id())));
@@ -181,18 +183,29 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### DELETE #################### */
     @Override
     public void delete(Long user_id, Long reservation_id) {
+
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+
+        Reservation reservation = reservationRepository.findById(reservation_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
+
+        // Comprobar si la reserva pertenece al usuario
+        if (reservation.getUser().getUser_id() != user.getUser_id()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation does not belong to user");
+        }
+
+        // No se puede eliminar cuando quedan menos de 24 horas para la reserva
+        Date today = new Date();
+        Date reservationDate = reservation.getDate();
+        Date reservationDateMinusOneDay = new Date(reservationDate.getTime() - 86400000);
+
+        if (reservationDateMinusOneDay.before(today)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation cannot be deleted when there are less than 1 day left for the reservation.");
+        }
+
         try {
-            User user = userRepository.findById(user_id)
-                    .orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
-            Reservation reservation = reservationRepository.findById(reservation_id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id));
-            if (reservation.getUser().getUser_id() != user.getUser_id()) {
-                System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation does not belong to user");
-            } else {
-                System.out.println(reservation.getUser().getUser_id() + "--" + user.getUser_id());
-                reservationRepository.delete(reservation);
-            }
+            reservationRepository.delete(reservation);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not deleted.");
         }
@@ -285,4 +298,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not checked.");
         }
     }
+
+
 }

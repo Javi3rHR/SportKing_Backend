@@ -6,11 +6,11 @@ import project.Reservations.entities.TimeInterval;
 
 public interface TimeIntervalRepository extends CrudRepository<TimeInterval, Long> {
 
-    @Query(value = "SELECT 1 FROM time_interval " +
+    @Query(value = "SELECT DISTINCT 1 FROM time_interval " +
             "WHERE court_id = :court_id " +
             "AND start_time = :start_time " +
             "AND end_time = :end_time", nativeQuery = true)
-    Boolean existsByCourtCourtIdAndStart_timeAndEnd_time(Long court_id, String start_time, String end_time);
+    Object existsByCourtCourtIdAndStart_timeAndEnd_time(Long court_id, String start_time, String end_time);
 
 //    List<TimeInterval> findAllByCourtCourtIdAndReservationDate(Long court_id, String reservation_date);
 //    List<TimeInterval> findAllByCourtCourtIdAndReservationDateAndStartTime(Long court_id, String reservation_date, int start_time);
