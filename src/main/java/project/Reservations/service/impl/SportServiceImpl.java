@@ -20,6 +20,7 @@ public class SportServiceImpl implements SportService {
 
     private final ModelMapper modelMapper;
 
+    /* Inyección de dependencias */
     public SportServiceImpl(SportRepository sportRepository, ModelMapper modelMapper) {
         this.sportRepository = sportRepository;
         this.modelMapper = modelMapper;
@@ -27,6 +28,7 @@ public class SportServiceImpl implements SportService {
 
     /* #################### GET #################### */
 
+    /* Buscar todos los deportes */
     @Override
     public List<SportDto> findAll() {
         try {
@@ -38,6 +40,7 @@ public class SportServiceImpl implements SportService {
         }
     }
 
+    /* Buscar deporte por nombre del deporte */
     @Override
     public SportDto findByName(String sport_name) {
         try {
@@ -48,6 +51,7 @@ public class SportServiceImpl implements SportService {
         }
     }
 
+    /* Buscar deporte por id*/
     @Override
     public SportDto findById(Long id) {
         try {
@@ -60,6 +64,7 @@ public class SportServiceImpl implements SportService {
 
     /* #################### POST #################### */
 
+    /* Crear deporte */
     @Override
     public SportDto save(SportDto sportDto) {
         if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
@@ -75,6 +80,7 @@ public class SportServiceImpl implements SportService {
     }
     /* #################### PUT #################### */
 
+    /* Actualizar deporte */
     @Override
     public SportDto update(SportDto sportDto) {
         if (!sportRepository.existsById(sportDto.getId())) {
@@ -94,6 +100,7 @@ public class SportServiceImpl implements SportService {
     }
     /* #################### DELETE #################### */
 
+    /* Borrar deporte */
     @Override
     public void delete(Long sport_id) {
         try {

@@ -23,6 +23,7 @@ public class CourtServiceImpl implements CourtService {
 
     private final ModelMapper modelMapper;
 
+    /* Inyección de dependencias */
     public CourtServiceImpl(CourtRepository courtRepository, ModelMapper modelMapper, SportRepository sportRepository) {
         this.courtRepository = courtRepository;
         this.modelMapper = modelMapper;
@@ -32,6 +33,7 @@ public class CourtServiceImpl implements CourtService {
 
     /* #################### GET #################### */
 
+    /* Buscar todas las pistas */
     @Override
     public List<CourtDto> findAll() {
         try {
@@ -43,6 +45,7 @@ public class CourtServiceImpl implements CourtService {
         }
     }
 
+    /* Buscar pista por id de pista y id de deporte */
     @Override
     public CourtDto findBySportIdAndCourtId(Long sport_id, Long court_id) {
         if (sportRepository.findById(sport_id).isEmpty()) {
@@ -119,6 +122,7 @@ public class CourtServiceImpl implements CourtService {
 
     /* #################### CHECK #################### */
 
+    /* Comprobar si existe una pista con el mismo nombre */
     @Override
     public boolean checkCourtAlreadyExists(String court_name) {
         return courtRepository.findByCourtName(court_name) != null;

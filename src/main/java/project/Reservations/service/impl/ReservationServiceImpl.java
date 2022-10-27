@@ -42,6 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* #################### GET #################### */
 
+    /* Busca todas las reservas */
     @Override
     public List<ReservationResponseDto> findAll() {
         try {
@@ -55,12 +56,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /* Busca una reserva por su id */
     @Override
     public Optional<Reservation> findById(Long reservation_id) {
         return Optional.ofNullable(reservationRepository.findById(reservation_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id)));
     }
 
+    /* Busca las reservas de un usuario */
     @Override
     public List<ReservationResponseDto> findByUserUserId(Long user_id) {
         try {
@@ -73,6 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /* Busca una reserva por su id y el id del usuario */
     @Override
     public ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id) {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
@@ -91,6 +95,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /* Busca las reservas de una pista */
     @Override
     public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
         try {
@@ -106,6 +111,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* #################### POST #################### */
 
+    /* Crea una reserva */
     @Override
     public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
 
@@ -134,6 +140,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* #################### DELETE #################### */
 
+    /* Borra una reserva */
     @Override
     public void delete(Long user_id, Long reservation_id) {
 
@@ -164,6 +171,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    /* Borra una reserva sin necesidad de pasar el id del usuario */
     @Override
     public void deleteWithAdmin(Long reservation_id) {
         try {

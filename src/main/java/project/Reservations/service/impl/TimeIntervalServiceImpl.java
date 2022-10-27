@@ -17,9 +17,9 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     private final TimeIntervalRepository timeIntervalRepository;
     private final CourtRepository courtRepository;
-
     private final ModelMapper modelMapper;
 
+    /* Inyección de dependencias */
     public TimeIntervalServiceImpl(TimeIntervalRepository timeIntervalRepository, CourtRepository courtRepository, ModelMapper modelMapper) {
         this.timeIntervalRepository = timeIntervalRepository;
         this.courtRepository = courtRepository;
@@ -28,6 +28,11 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
 
     /* #################### GET #################### */
+
+    /* Buscar todos los intervalos de tiempo */
+
+
+    /* Buscar intervalo de tiempo por id */
     @Override
     public TimeIntervalDto findById(Long time_interval_id) {
         return null;
@@ -41,6 +46,7 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     /* #################### POST #################### */
 
+    /* Crear intervalo de tiempo */
     @Override
     public TimeIntervalDto save(Long court_id, TimeIntervalDto timeIntervalDto) {
         Court court = courtRepository.findById(court_id)
@@ -61,17 +67,11 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while creating time interval");
         }
     }
-
-
-//        if (timeIntervalDto.getStart_time().equals(timeIntervalDto.getEnd_time())) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time and end time must be different");
-//        }
-//        if (timeIntervalDto.getStart_time().compareTo(timeIntervalDto.getEnd_time()) > 0) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Start time must be before end time");
-//        }
+    
 
     /* #################### OTHER #################### */
 
+    /* Comprobar si el intervalo de tiempo es válido */
     public Boolean timeIntervalIsValid(Long court_id, TimeIntervalDto timeIntervalDto) {
         if ((timeIntervalRepository.existsByCourtCourtIdAndStart_timeAndEnd_time(
                 court_id,
@@ -88,28 +88,28 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
         return true;
     }
 
-    // TODO
-    @Override
-    public String calculateEndTime(String start_time, int duration) {
-        String end_time = "";
-        int start_hour = Integer.parseInt(start_time.substring(0, 2));
-        int start_minute = Integer.parseInt(start_time.substring(3, 5));
-        int end_hour = start_hour + duration / 60;
-        int end_minute = start_minute + duration % 60;
-        if (end_minute >= 60) {
-            end_hour++;
-            end_minute -= 60;
-        }
-        if (end_hour < 10) {
-            end_time += "0";
-        }
-        end_time += end_hour + ":";
-        if (end_minute < 10) {
-            end_time += "0";
-        }
-        end_time += end_minute;
-        return end_time;
-    }
+    // TODO Calcular end_time a partir de start_time y duration
+//    @Override
+//    public String calculateEndTime(String start_time, int duration) {
+//        String end_time = "";
+//        int start_hour = Integer.parseInt(start_time.substring(0, 2));
+//        int start_minute = Integer.parseInt(start_time.substring(3, 5));
+//        int end_hour = start_hour + duration / 60;
+//        int end_minute = start_minute + duration % 60;
+//        if (end_minute >= 60) {
+//            end_hour++;
+//            end_minute -= 60;
+//        }
+//        if (end_hour < 10) {
+//            end_time += "0";
+//        }
+//        end_time += end_hour + ":";
+//        if (end_minute < 10) {
+//            end_time += "0";
+//        }
+//        end_time += end_minute;
+//        return end_time;
+//    }
 
 //    @Override
 //    public boolean ifHalfHour(String start_time) {
