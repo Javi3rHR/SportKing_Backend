@@ -29,31 +29,31 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public List<SportDto> findAll() {
-        try{
-        List<Sport> sports = new ArrayList<>();
-        sportRepository.findAll().iterator().forEachRemaining(sports::add);
-        return sports.stream().map(this::mapDTO).collect(Collectors.toList());
-        }catch (Exception e){
+        try {
+            List<Sport> sports = new ArrayList<>();
+            sportRepository.findAll().iterator().forEachRemaining(sports::add);
+            return sports.stream().map(this::mapDTO).collect(Collectors.toList());
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting all sports");
         }
     }
 
     @Override
     public SportDto findByName(String sport_name) {
-        try{
-        Sport sport = sportRepository.findBySportName(sport_name);
+        try {
+            Sport sport = sportRepository.findBySportName(sport_name);
             return mapDTO(sport);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting sport by name");
         }
     }
 
     @Override
     public SportDto findById(Long id) {
-        try{
-        Sport sport = sportRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not found"));
+        try {
+            Sport sport = sportRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not found"));
             return mapDTO(sport);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while getting sport by id");
         }
     }
@@ -65,11 +65,11 @@ public class SportServiceImpl implements SportService {
         if (sportRepository.findBySportName(sportDto.getSport_name()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Sport with name '" + sportDto.getSport_name() + "' already exists");
         }
-        try{
-        Sport sport = mapEntity(sportDto);
-        sportRepository.save(sport);
-        return mapDTO(sport);
-        }catch (Exception e){
+        try {
+            Sport sport = mapEntity(sportDto);
+            sportRepository.save(sport);
+            return mapDTO(sport);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while saving sport");
         }
     }
@@ -96,14 +96,14 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public void delete(Long sport_id) {
-        try{
-        Sport sport = sportRepository.findById(sport_id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Sport with id '" + sport_id + "' not found"
-                ));
-        sportRepository.delete(sport);
-        }catch (Exception e){
+        try {
+            Sport sport = sportRepository.findById(sport_id)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Sport with id '" + sport_id + "' not found"
+                    ));
+            sportRepository.delete(sport);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while deleting sport");
         }
     }
@@ -118,6 +118,7 @@ public class SportServiceImpl implements SportService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sport not mapped.");
         }
     }
+
     // Convierte de DTO a Entidad
     private Sport mapEntity(SportDto sportDto) {
         try {

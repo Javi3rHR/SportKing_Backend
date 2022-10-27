@@ -1,10 +1,14 @@
 package project.Reservations.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import project.Reservations.dto.timeInterval.TimeIntervalDto;
+import project.Reservations.entities.Court;
 import project.Reservations.entities.TimeInterval;
+import project.Reservations.exception.ResourceNotFoundException;
+import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.TimeIntervalRepository;
 import project.Reservations.service.TimeIntervalService;
 
@@ -12,15 +16,20 @@ import project.Reservations.service.TimeIntervalService;
 public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     private final TimeIntervalRepository timeIntervalRepository;
+    private final CourtRepository courtRepository;
 
-    public TimeIntervalServiceImpl(TimeIntervalRepository timeIntervalRepository) {
+    private final ModelMapper modelMapper;
+
+    public TimeIntervalServiceImpl(TimeIntervalRepository timeIntervalRepository, CourtRepository courtRepository, ModelMapper modelMapper) {
         this.timeIntervalRepository = timeIntervalRepository;
+        this.courtRepository = courtRepository;
+        this.modelMapper = modelMapper;
     }
 
 
     /* #################### GET #################### */
     @Override
-    public TimeInterval findById(Long time_interval_id) {
+    public TimeIntervalDto findById(Long time_interval_id) {
         return null;
     }
 
@@ -33,14 +42,17 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
     /* #################### POST #################### */
 
     @Override
-    public TimeInterval createTimeInterval(Long court_id, TimeIntervalDto timeIntervalDto) {
-        try{
-            TimeInterval timeInterval = new TimeInterval();
+    public TimeIntervalDto save(Long court_id, TimeIntervalDto timeIntervalDto) {
+        Court court = courtRepository.findById(court_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", court_id));
+        try {
+            TimeInterval timeInterval = mapEntity(timeIntervalDto);
             timeInterval.setStart_time(timeIntervalDto.getStart_time());
-            timeInterval.setEnd_time(calculateEndTime(timeIntervalDto.getStart_time(), timeIntervalDto.getDuration()));
-            timeInterval.setCourt(timeIntervalDto.getCourt());
-            return timeIntervalRepository.save(timeInterval);
-        }catch (Exception e){
+            timeInterval.setEnd_time(timeIntervalDto.getEnd_time());
+            timeInterval.setCourt(court);
+            // TODO timeInterval.setEnd_time(calculateEndTime(timeIntervalDto.getStart_time(), timeIntervalDto.getDuration()));
+            return mapDTO(timeIntervalRepository.save(timeInterval));
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while creating time interval");
         }
     }
@@ -56,6 +68,8 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     /* #################### OTHER #################### */
 
+
+    // TODO
     @Override
     public String calculateEndTime(String start_time, int duration) {
         String end_time = "";
@@ -86,6 +100,36 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
     @Override
     public void setCourtToTimeInterval(Long court_id) {
 
+
+    }
+
+    /* #################### MAPPER #################### */
+
+    // Convierte entidad a DTO
+    private TimeIntervalDto mapDTO(TimeInterval timeInterval) {
+        try {
+            return modelMapper.map(timeInterval, TimeIntervalDto.class);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TimeInterval not mapped.");
+        }
+    }
+
+    // TODO
+//    private TimeIntervalResponseDto mapDTOResponse(TimeInterval timeInterval) {
+//        try {
+//            return modelMapper.map(timeInterval, TimeIntervalResponseDto.class);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TimeInterval not mapped.");
+//        }
+//    }
+
+    // Convierte de DTO a Entidad
+    private TimeInterval mapEntity(TimeIntervalDto timeIntervalDto) {
+        try {
+            return modelMapper.map(timeIntervalDto, TimeInterval.class);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TimeInterval not mapped.");
+        }
     }
 }
 

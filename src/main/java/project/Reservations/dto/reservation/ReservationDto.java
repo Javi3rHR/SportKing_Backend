@@ -17,7 +17,7 @@ public class ReservationDto {
 
     private long id;
     private long court_id;
-
+    private long time_interval_id;
     @NotEmpty(message = "User is required")
     private User user;
 

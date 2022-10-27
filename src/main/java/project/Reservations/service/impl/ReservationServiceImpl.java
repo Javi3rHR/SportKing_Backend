@@ -11,6 +11,7 @@ import project.Reservations.entities.Reservation;
 import project.Reservations.exception.ResourceNotFoundException;
 import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.ReservationRepository;
+import project.Reservations.repository.TimeIntervalRepository;
 import project.Reservations.service.ReservationService;
 import project.Users.entities.User;
 import project.Users.repository.UserRepository;
@@ -29,13 +30,16 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final CourtRepository courtRepository;
 
+    private final TimeIntervalRepository timeIntervalRepository;
+
     private final ModelMapper modelMapper;
 
     /* Inyección de dependencias */
-    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, CourtRepository courtRepository, ModelMapper modelMapper) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, CourtRepository courtRepository, TimeIntervalRepository timeIntervalRepository, ModelMapper modelMapper) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
         this.courtRepository = courtRepository;
+        this.timeIntervalRepository = timeIntervalRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -137,11 +141,11 @@ public class ReservationServiceImpl implements ReservationService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
 
-        try{
-        calendar.setTime(reservation.getDate());
-        sdf.format(calendar.getTime());
-        reservation.setDate(calendar.getTime());
-        }catch (Exception e){
+        try {
+            calendar.setTime(reservation.getDate());
+            sdf.format(calendar.getTime());
+            reservation.setDate(calendar.getTime());
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Date format is not correct.");
         }
 
@@ -158,11 +162,14 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException(e);
         }
         if (reservationDateDate.before(todayDate)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '"+reservationDate+"' must be after today's date '"+today+"'.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '" + reservationDate + "' must be after today's date '" + today + "'.");
         }
 
         reservation.setCourt(courtRepository.findById(reservationDTO.getCourt_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", reservationDTO.getCourt_id())));
+
+        reservation.setTime_interval(timeIntervalRepository.findById(reservationDTO.getTime_interval_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Time interval", "time_interval_id", reservationDTO.getTime_interval_id())));
 
         // Comprobar que la hora de inicio no sea posterior a la hora de fin
 //        if (reservation.getStartTime().after(reservation.getEndTime())) {

@@ -9,7 +9,8 @@ public class TimeIntervalDto {
 
         private long id;
         private String start_time;
-        private int duration;
+        private String end_time;
+//        private int duration;
         private Court court;
 
         public TimeIntervalDto() {
