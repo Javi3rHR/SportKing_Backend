@@ -9,7 +9,6 @@ import project.Reservations.dto.reservation.ReservationDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 import project.Reservations.exception.ResourceNotFoundException;
-import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.ReservationRepository;
 import project.Reservations.repository.TimeIntervalRepository;
 import project.Reservations.service.ReservationService;
@@ -28,22 +27,21 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final UserRepository userRepository;
 
-    private final CourtRepository courtRepository;
-
     private final TimeIntervalRepository timeIntervalRepository;
 
     private final ModelMapper modelMapper;
 
     /* Inyección de dependencias */
-    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, CourtRepository courtRepository, TimeIntervalRepository timeIntervalRepository, ModelMapper modelMapper) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, TimeIntervalRepository timeIntervalRepository, ModelMapper modelMapper) {
         this.reservationRepository = reservationRepository;
         this.userRepository = userRepository;
-        this.courtRepository = courtRepository;
         this.timeIntervalRepository = timeIntervalRepository;
         this.modelMapper = modelMapper;
     }
 
+
     /* #################### GET #################### */
+
     @Override
     public List<ReservationResponseDto> findAll() {
         try {
@@ -54,8 +52,6 @@ public class ReservationServiceImpl implements ReservationService {
             return reservationResponse;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "List of reservations not found.");
-            // TODO probar si se puede throw responseentity
-//            throw new ResponseEntity<>("List of reservations not found.", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -64,7 +60,6 @@ public class ReservationServiceImpl implements ReservationService {
         return Optional.ofNullable(reservationRepository.findById(reservation_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservation_id)));
     }
-
 
     @Override
     public List<ReservationResponseDto> findByUserUserId(Long user_id) {
@@ -96,27 +91,6 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-//    @Override
-//    public ReservationResponseDto findByIdAndUserUsername(Long reservation_id, String username) {
-//        User user = userRepository.findByUsername(username);
-//        if (user == null) {
-//            throw new RuntimeException("User not found.");
-//        }
-//        try {
-//            Reservation reservation = reservationRepository.findByIdAndUserUsername(reservation_id, username);
-//
-//            ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
-//            reservationResponse.setUser_id(user.getUser_id());
-//            reservationResponse.setUsername(user.getUsername());
-//            reservationResponse.setEmail(user.getEmail());
-//            reservationResponse.setPhone(user.getPhone());
-//
-//            return reservationResponse;
-//        } catch (Exception e) {
-//            throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
-//        }
-//    }
-
     @Override
     public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
         try {
@@ -129,7 +103,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+
     /* #################### POST #################### */
+
     @Override
     public ReservationDto save(Long user_id, ReservationDto reservationDTO) {
 
@@ -137,51 +113,27 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
 
         Reservation reservation = mapEntity(reservationDTO);
+
+        // Formateo de fechas
+        SimpleDateFormat sdf = getSimpleDateFormat(reservation);
+
+        // Generar fecha con formato correcto para la validación
+        Date reservationDateDate = getDate(reservation, sdf);
+
+        // Validar que la reserva no se solape con otra
+        checkReservationAlreadyExist(reservationDTO, reservationDateDate);
+
+        // Setters
         reservation.setUser(user);
-
-        // Comprobar formato de fecha
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-
-        try {
-            calendar.setTime(reservation.getDate());
-            sdf.format(calendar.getTime());
-            reservation.setDate(calendar.getTime());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Date format is not correct.");
-        }
-
-        // Comprobar que la fecha no sea anterior a la actual
-        String today = sdf.format(new Date());
-        String reservationDate = sdf.format(reservation.getDate());
-        Date todayDate = null;
-        Date reservationDateDate = null;
-
-        try {
-            todayDate = sdf.parse(today);
-            reservationDateDate = sdf.parse(reservationDate);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        if (reservationDateDate.before(todayDate)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '" + reservationDate + "' must be after today's date '" + today + "'.");
-        }
-
         reservation.setTime_interval(timeIntervalRepository.findById(reservationDTO.getTime_interval_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Time interval", "time_interval_id", reservationDTO.getTime_interval_id())));
 
-        Long time_interval_id = reservationDTO.getTime_interval_id();
-
-        // Comprobar que la pista no está reservada en ese horario
-        if((reservationRepository.checkIfReservationExists(
-                reservationDateDate,
-                time_interval_id)) != null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation already exists.");
-        }
         return mapDTO(reservationRepository.save(reservation));
     }
 
+
     /* #################### DELETE #################### */
+
     @Override
     public void delete(Long user_id, Long reservation_id) {
 
@@ -224,11 +176,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+
     /* #################### PUT #################### */
-
-
-
-
 
 
     /* #################### MAPPER #################### */
@@ -287,4 +236,55 @@ public class ReservationServiceImpl implements ReservationService {
             setUserDetails(user_id, reservationResponse);
         }
     }
+
+
+    /* #################### VALIDATIONS #################### */
+
+    /* Generar fecha con formato correcto para validar la fecha */
+    private static Date getDate(Reservation reservation, SimpleDateFormat sdf) {
+        String today = sdf.format(new Date());
+        String reservationDate = sdf.format(reservation.getDate());
+        Date todayDate;
+        Date reservationDateDate;
+
+        try {
+            todayDate = sdf.parse(today);
+            reservationDateDate = sdf.parse(reservationDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Comprobar que la fecha de la reserva es posterior a la fecha actual
+        if (reservationDateDate.before(todayDate)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation date '" + reservationDate + "' must be after today's date '" + today + "'.");
+        }
+        return reservationDateDate;
+    }
+
+    /* Establece el formato para la fecha */
+    private static SimpleDateFormat getSimpleDateFormat(Reservation reservation) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+
+        try {
+            calendar.setTime(reservation.getDate());
+            sdf.format(calendar.getTime());
+            reservation.setDate(calendar.getTime());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Date format is not correct.");
+        }
+        return sdf;
+    }
+
+    /* Comprueba si la reserva ya existe */
+    private void checkReservationAlreadyExist(ReservationDto reservationDTO, Date reservationDateDate) {
+        Long time_interval_id = reservationDTO.getTime_interval_id();
+        // Comprobar que la pista no está reservada en ese horario
+        if ((reservationRepository.checkIfReservationExists(
+                reservationDateDate,
+                time_interval_id)) != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Court is already reserved in that time interval.");
+        }
+    }
+
 }
