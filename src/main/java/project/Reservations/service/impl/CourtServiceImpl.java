@@ -1,5 +1,6 @@
 package project.Reservations.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service("courtService")
 public class CourtServiceImpl implements CourtService {
 
@@ -114,6 +116,7 @@ public class CourtServiceImpl implements CourtService {
         try {
             Court court = courtRepository.findById(court_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not found"));
             courtRepository.delete(court);
+            log.info("Court with id '" + court_id + "' deleted");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while deleting court");
         }

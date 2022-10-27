@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"admin3\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"admin3@admin.edu\"\r\n}",
+							"raw": "{\r\n    \"username\" : \"javier\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"javier@gmail.com\"\r\n}\r\n// {\r\n//     \"username\" : \"admin3\",\r\n//     \"password\" : \"1234\",\r\n//     \"email\" : \"admin3@admin.edu\"\r\n// }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -78,7 +78,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Nzk1MDk3LCJleHAiOjE2NjY4MTMwOTd9.5-AFC-mZtfbm3qWg8fxtbXJGWpWwUKDnW0dQ5ACUGxg",
 									"type": "string"
 								}
 							]
@@ -105,16 +105,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -127,7 +117,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1",
+							"raw": "http://localhost:8080/users/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -135,7 +125,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -144,20 +134,10 @@
 				{
 					"name": "User By Username",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/users/username/admin3",
+							"raw": "http://localhost:8080/users/username/javier",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -166,7 +146,7 @@
 							"path": [
 								"users",
 								"username",
-								"admin3"
+								"javier"
 							]
 						}
 					},
@@ -175,21 +155,11 @@
 				{
 					"name": "User",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NjgwNzU5LCJleHAiOjE2NjY2OTg3NTl9.uh33k4VfpRWMyc-TfvnGhTkNnLLko-TtCGzEICLZX00",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"javie2@admin.edu\",\r\n    \"phone\":\"9123123\",\r\n    \"name\":\"Javir Herreros\"\r\n}",
+							"raw": "{\r\n    \"name\":\"JavierHR\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -197,7 +167,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/3",
+							"raw": "http://localhost:8080/users/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -205,7 +175,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"3"
+								"7"
 							]
 						}
 					},
@@ -214,16 +184,6 @@
 				{
 					"name": "User",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NDQzLCJleHAiOjE2NjY3MTQ0NDN9.QnciwbuI9uY5lIYsKGq906YhGfnSeKsVBLL59JNJMr0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -236,7 +196,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/users/1",
+							"raw": "http://localhost:8080/users/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -244,7 +204,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"1"
+								"5"
 							]
 						}
 					},
@@ -253,16 +213,6 @@
 				{
 					"name": "User By CurrentUser",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2MTczLCJleHAiOjE2NjY3MTQxNzN9.TEFshUlU7YE-W7sLHefUvUV_0fyOl4MHVpmMg75Mi5A",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -290,6 +240,26 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
@@ -298,21 +268,11 @@
 				{
 					"name": "Reservation By User ID",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"date\":\"26/10/2022\",\r\n    \"paid\": \"true\" \r\n}",
+							"raw": "{\r\n    \"date\":\"27/10/2022\",\r\n    \"time_interval_id\":1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -339,16 +299,6 @@
 				{
 					"name": "All Reservations",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -369,16 +319,6 @@
 				{
 					"name": "Reservations By User ID",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -401,20 +341,10 @@
 				{
 					"name": "Reservations By ID And User ID",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Mjc2MjkwLCJleHAiOjE2NjYyOTQyOTB9.uACtv09hMM0I1EASIdbCwuHDypt-xb7XGryfmKTFbuQ",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users/3/reservations/1",
+							"raw": "http://localhost:8080/api/users/2/reservations/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -423,9 +353,9 @@
 							"path": [
 								"api",
 								"users",
-								"3",
+								"2",
 								"reservations",
-								"1"
+								"7"
 							]
 						}
 					},
@@ -434,62 +364,10 @@
 				{
 					"name": "Reservations",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NjgwNzU5LCJleHAiOjE2NjY2OTg3NTl9.uh33k4VfpRWMyc-TfvnGhTkNnLLko-TtCGzEICLZX00",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/users/3/reservations/2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"users",
-								"3",
-								"reservations",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reservations",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NjgwNzU5LCJleHAiOjE2NjY2OTg3NTl9.uh33k4VfpRWMyc-TfvnGhTkNnLLko-TtCGzEICLZX00",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/users/3/reservations/2",
+							"raw": "http://localhost:8080/api/users/3/reservations/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -500,7 +378,7 @@
 								"users",
 								"3",
 								"reservations",
-								"2"
+								"7"
 							]
 						}
 					},
@@ -509,16 +387,6 @@
 				{
 					"name": "Reservations ADMIN",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NjgwNzU5LCJleHAiOjE2NjY2OTg3NTl9.uh33k4VfpRWMyc-TfvnGhTkNnLLko-TtCGzEICLZX00",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -537,6 +405,26 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
@@ -545,21 +433,11 @@
 				{
 					"name": "Sports",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sport_name\":\"Padel\"\r\n}",
+							"raw": "{\r\n    \"sport_name\":\"furbo sala\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -587,16 +465,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -629,16 +497,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -651,7 +509,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/sports",
+							"raw": "http://localhost:8080/api/sports/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -659,7 +517,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"sports"
+								"sports",
+								"3"
 							]
 						}
 					},
@@ -668,21 +527,11 @@
 				{
 					"name": "Sports",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":2,\r\n    \"sport_name\":\"tenis\"\r\n}",
+							"raw": "{\r\n    \"id\":3444,\r\n    \"sport_name\":\"tenis\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -707,16 +556,6 @@
 				{
 					"name": "Sports",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -729,7 +568,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/sports/2",
+							"raw": "http://localhost:8080/api/sports/33",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -738,11 +577,31 @@
 							"path": [
 								"api",
 								"sports",
-								"2"
+								"33"
 							]
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -752,21 +611,11 @@
 				{
 					"name": "Courts",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NzExMzc3LCJleHAiOjE2NjY3MjkzNzd9.1HLdcLDEcmr4flH0G2LgexOfed98Z1LuKwg8mG7XXC0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"1\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Furbo sala 2\"\r\n\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -774,7 +623,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/courts",
+							"raw": "http://localhost:8080/api/sport/3/courts",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -782,6 +631,8 @@
 							"port": "8080",
 							"path": [
 								"api",
+								"sport",
+								"3",
 								"courts"
 							]
 						}
@@ -794,16 +645,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -836,16 +677,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NzExMzc3LCJleHAiOjE2NjY3MjkzNzd9.1HLdcLDEcmr4flH0G2LgexOfed98Z1LuKwg8mG7XXC0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -858,7 +689,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/courts/1",
+							"raw": "http://localhost:8080/api/sport/3/court/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -866,8 +697,10 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"courts",
-								"1"
+								"sport",
+								"3",
+								"court",
+								"7"
 							]
 						}
 					},
@@ -876,21 +709,11 @@
 				{
 					"name": "Courts",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2NzExMzc3LCJleHAiOjE2NjY3MjkzNzd9.1HLdcLDEcmr4flH0G2LgexOfed98Z1LuKwg8mG7XXC0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\":2,\r\n    \"name\":\"prueba\"\r\n}",
+							"raw": "{\r\n    \"id\":6,\r\n    \"price\":20,\r\n    \"court_id\":1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -898,7 +721,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/courts",
+							"raw": "http://localhost:8080/api/sport/3/courts",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -906,6 +729,8 @@
 							"port": "8080",
 							"path": [
 								"api",
+								"sport",
+								"3",
 								"courts"
 							]
 						}
@@ -915,16 +740,6 @@
 				{
 					"name": "Courts",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjQiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Njk2NTc0LCJleHAiOjE2NjY3MTQ1NzR9.CXEi2RkBSGUY51DTFWVaWENRIsZx9E1dIF6q83k60Og",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -937,7 +752,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/courts/1",
+							"raw": "http://localhost:8080/api/courts/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -946,13 +761,147 @@
 							"path": [
 								"api",
 								"courts",
-								"1"
+								"2"
 							]
 						}
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
+		},
+		{
+			"name": "Time Interval",
+			"item": [
+				{
+					"name": "Time Intervals",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_time\":\"10:00\",\r\n    \"end_time\":\"10:30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/courts/2/time_intervals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"courts",
+								"2",
+								"time_intervals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Time Intervals",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/time_intervals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"time_intervals"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2ODgxMzI1LCJleHAiOjE2NjY4OTkzMjV9.1la42k1-IYpfbpOUrqy5kp8odGTY31euyjvdrswxmb4",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

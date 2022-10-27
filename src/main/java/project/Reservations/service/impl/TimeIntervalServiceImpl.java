@@ -1,5 +1,6 @@
 package project.Reservations.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.TimeIntervalRepository;
 import project.Reservations.service.TimeIntervalService;
 
+@Slf4j
 @Service("timeIntervalService")
 public class TimeIntervalServiceImpl implements TimeIntervalService {
 
@@ -67,9 +69,24 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while creating time interval");
         }
     }
-    
 
-    /* #################### OTHER #################### */
+    /* #################### PUT #################### */
+
+
+    /* #################### DELETE #################### */
+
+    /* Borrar intervalo de tiempo */
+    @Override
+    public void delete(Long time_interval_id) {
+        try {
+            timeIntervalRepository.deleteById(time_interval_id);
+            log.info("Time interval with id '" + time_interval_id + "' deleted");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while deleting time interval");
+        }
+    }
+
+    /* #################### VALIDATION #################### */
 
     /* Comprobar si el intervalo de tiempo es válido */
     public Boolean timeIntervalIsValid(Long court_id, TimeIntervalDto timeIntervalDto) {

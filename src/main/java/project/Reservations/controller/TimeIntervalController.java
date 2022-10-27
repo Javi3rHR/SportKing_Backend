@@ -40,4 +40,11 @@ public class TimeIntervalController {
 
     /* #################### DELETE #################### */
 
+    @DeleteMapping("time_intervals/{time_interval_id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteTimeInterval(@PathVariable("time_interval_id") Long time_interval_id) {
+        timeIntervalService.delete(time_interval_id);
+        return new ResponseEntity<>("Time interval with id '" + time_interval_id + "' has been deleted", HttpStatus.OK);
+    }
+
 }
