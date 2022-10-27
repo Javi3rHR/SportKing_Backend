@@ -7,6 +7,4 @@ public interface TimeIntervalService {
 //    List<TimeInterval> findAvailableTimeInterval(Long court_id, String reservation_date, String start_time);
     TimeIntervalDto save(Long court_id, TimeIntervalDto timeIntervalDto);
     String calculateEndTime(String start_time, int duration);
-    boolean ifHalfHour(String start_time);
-    void setCourtToTimeInterval(Long court_id);
 }
