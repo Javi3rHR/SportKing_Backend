@@ -163,7 +163,8 @@ public class ReservationServiceImpl implements ReservationService {
         Date reservationDateMinusOneDay = new Date(reservationDate.getTime() - 86400000);
 
         if (reservationDateMinusOneDay.before(today)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation cannot be deleted when there are less than 1 day left for the reservation.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Reservation cannot be deleted when there are less than 1 day left for the reservation.");
         }
 
         try {
