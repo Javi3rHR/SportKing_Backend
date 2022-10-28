@@ -51,8 +51,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             List<Reservation> reservations = new ArrayList<>();
             reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
-            List<ReservationResponseAdminDto> reservationResponse = reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
-            return reservationResponse;
+            return reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "List of reservations not found.");
         }
@@ -82,7 +81,6 @@ public class ReservationServiceImpl implements ReservationService {
         userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         try {
             Reservation reservation = reservationRepository.findByIdAndUserUserId(reservation_id, user_id);
-
             return mapDTOResponse(reservation);
         } catch (Exception e) {
             throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
@@ -94,9 +92,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationResponseAdminDto> findByCourtCourtId(Long court_id) {
         try {
             List<Reservation> reservations = reservationRepository.findByCourtCourtId(court_id);
-            List<ReservationResponseAdminDto> reservationResponse = reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
-//            setUserDetailsWithoutUserID(reservationResponse);
-            return reservationResponse;
+            return reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
         } catch (Exception e) {
             throw new ResourceNotFoundException("Court", "court_id", court_id);
         }

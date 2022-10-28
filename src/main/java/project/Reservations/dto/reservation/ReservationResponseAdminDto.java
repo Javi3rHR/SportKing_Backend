@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 public class ReservationResponseAdminDto {
     private long id;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date date;
     private Boolean paid;
     private UserResponseDto user;

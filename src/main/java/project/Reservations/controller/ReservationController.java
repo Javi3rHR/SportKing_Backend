@@ -24,6 +24,7 @@ public class ReservationController {
 
 
     /* #################### GET #################### */
+    // TODO RESTA UN DIA DE LA FECHA QUE SE LE PASA Y NO SE POR QUÉ
     @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ReservationResponseAdminDto>> getAll() {

@@ -13,6 +13,12 @@ import project.Reservations.repository.CourtRepository;
 import project.Reservations.repository.TimeIntervalRepository;
 import project.Reservations.service.TimeIntervalService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service("timeIntervalService")
 public class TimeIntervalServiceImpl implements TimeIntervalService {
@@ -38,6 +44,26 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
     @Override
     public TimeIntervalDto findById(Long time_interval_id) {
         return null;
+    }
+
+    /* Buscar intervalo de tiempo por court_id y reservation_date*/
+    @Override
+    public List<TimeIntervalDto> findByCourtCourtIdAndReservationDate(Long court_id, String reservation_date) {
+        try{
+            // Formato inicial
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = sdf.parse(reservation_date);
+            // Aplica formato de fecha requerido
+            sdf.applyPattern("yyyy-MM-dd");
+            String dateFormatted = sdf.format(date);
+            date = sdf.parse(dateFormatted);
+            List<TimeInterval> timeIntervals = timeIntervalRepository.findAllByCourtCourtIdAndReservationDate(court_id, date);
+            return timeIntervals.stream().map(this::mapDTO).collect(Collectors.toList());
+        }catch (ResourceNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TimeInterval not found");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 //    @Override
@@ -91,8 +117,8 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
     /**
      * Comprueba si el intervalo de tiempo es válido
      *
-     * @param court_id
-     * @param timeIntervalDto
+     * @param court_id id de la pista
+     * @param timeIntervalDto intervalo de tiempo
      * @return boolean
      */
     public Boolean timeIntervalIsValid(Long court_id, TimeIntervalDto timeIntervalDto) {

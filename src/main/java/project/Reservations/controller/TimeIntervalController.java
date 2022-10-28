@@ -8,6 +8,7 @@ import project.Reservations.dto.timeInterval.TimeIntervalDto;
 import project.Reservations.service.TimeIntervalService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -21,16 +22,20 @@ public class TimeIntervalController {
 
     /* #################### GET #################### */
 
-    @PostMapping("/courts/{court_id}/time_intervals")
+    @GetMapping(value = "/courts/{court_id}/time_intervals", params = "reservation_date")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TimeIntervalDto> createTimeInterval(@PathVariable("court_id") Long court_id, @Valid @RequestBody TimeIntervalDto timeIntervalDto) {
-        return new ResponseEntity<>(timeIntervalService.save(court_id, timeIntervalDto), HttpStatus.CREATED);
+    public ResponseEntity<List<TimeIntervalDto>> findAllByCourtCourtIdAndReservationDate(@PathVariable Long court_id, @RequestParam String reservation_date) {
+        return new ResponseEntity<>(timeIntervalService.findByCourtCourtIdAndReservationDate(court_id, reservation_date), HttpStatus.OK);
     }
 
 
     /* #################### POST #################### */
 
-
+    @PostMapping(value = "/courts/{court_id}/time_intervals")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TimeIntervalDto> createTimeInterval(@PathVariable("court_id") Long court_id, @Valid @RequestBody TimeIntervalDto timeIntervalDto) {
+        return new ResponseEntity<>(timeIntervalService.save(court_id, timeIntervalDto), HttpStatus.CREATED);
+    }
 
 
     /* #################### PUT #################### */

@@ -3,8 +3,8 @@ package project.Reservations.dto.reservation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import project.Reservations.entities.TimeInterval;
-import project.Users.entities.User;
+import project.Reservations.dto.timeInterval.TimeIntervalDto;
+import project.Users.dto.UserResponseDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,11 +17,6 @@ public class ReservationDto {
     private long id;
 
     private long time_interval_id;
-    @NotEmpty(message = "User is required")
-    private User user;
-
-    @NotEmpty(message = "Time interval is required")
-    private TimeInterval time_interval;
 
     @NotNull(message = "Date is required")
     @JsonFormat(pattern="dd/MM/yyyy")
@@ -29,6 +24,12 @@ public class ReservationDto {
 
     @NotNull(message = "Paid is required")
     private Boolean paid;
+
+    @NotEmpty(message = "User is required")
+    private UserResponseDto user;
+
+    @NotEmpty(message = "Time interval is required")
+    private TimeIntervalDto time_interval;
 
     public ReservationDto() {
         super();
