@@ -50,12 +50,6 @@ public class CourtServiceImpl implements CourtService {
     /* Buscar pista por id de pista y id de deporte */
     @Override
     public CourtDto findBySportIdAndCourtId(Long sport_id, Long court_id) {
-        if (sportRepository.findById(sport_id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Sport does not exist");
-        }
-        if (courtRepository.findById(court_id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Court does not exist");
-        }
         try {
             Court court = courtRepository.findBySportIdAndCourtId(sport_id, court_id);
             return mapDTO(court);
@@ -114,7 +108,8 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public void delete(Long court_id) {
         try {
-            Court court = courtRepository.findById(court_id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not found"));
+            Court court = courtRepository.findById(court_id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Court not found"));
             courtRepository.delete(court);
             log.info("Court with id '" + court_id + "' deleted");
         } catch (Exception e) {
@@ -125,7 +120,11 @@ public class CourtServiceImpl implements CourtService {
 
     /* #################### CHECK #################### */
 
-    /* Comprobar si existe una pista con el mismo nombre */
+    /**
+     * Comprobar si existe una pista con el mismo nombre
+     *
+     * @return true si existe, false si no existe
+     */
     @Override
     public boolean checkCourtAlreadyExists(String court_name) {
         return courtRepository.findByCourtName(court_name) != null;

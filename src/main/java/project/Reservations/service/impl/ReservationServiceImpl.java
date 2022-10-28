@@ -223,7 +223,13 @@ public class ReservationServiceImpl implements ReservationService {
     /* #################### SETTERS #################### */
 
     /* TODO Refactorizar para no tener que recorrer todas */
-    /* Insertar los campos de User en ReservationResponse pasando user_id */
+
+    /**
+     * Setea los detalles del usuario en cada reserva de la lista para devolverlo en el response
+     *
+     * @param user_id
+     * @param reservationResponse
+     */
     private void setUserDetails(Long user_id, List<ReservationResponseDto> reservationResponse) {
         User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
         for (ReservationResponseDto r : reservationResponse) {
@@ -235,7 +241,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
-    /* Insertar los campos de User en ReservationResponse sin pasar user_id */
+    /**
+     * Insertar los campos de User en ReservationResponse sin pasar user_id
+     *
+     * @param reservationResponse
+     */
     private void setUserDetailsWithoutUserID(List<ReservationResponseDto> reservationResponse) {
         User user;
         for (ReservationResponseDto r : reservationResponse) {
@@ -251,7 +261,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* #################### VALIDATIONS #################### */
 
-    /* Generar fecha con formato correcto para validar la fecha */
+    /**
+     * Generar fecha con formato correcto para su validaci'on
+     *
+     * @param reservation
+     * @param sdf
+     * @return Date
+     */
     private static Date getDate(Reservation reservation, SimpleDateFormat sdf) {
         String today = sdf.format(new Date());
         String reservationDate = sdf.format(reservation.getDate());
@@ -272,7 +288,12 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDateDate;
     }
 
-    /* Establece el formato para la fecha */
+    /**
+     * Establece el formato para la fecha
+     *
+     * @param reservation
+     * @return SimpleDateFormat
+     */
     private static SimpleDateFormat getSimpleDateFormat(Reservation reservation) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -287,7 +308,12 @@ public class ReservationServiceImpl implements ReservationService {
         return sdf;
     }
 
-    /* Comprueba si la reserva ya existe */
+    /**
+     * Comprueba si la reserva ya existe
+     *
+     * @param reservationDTO
+     * @param reservationDateDate
+     */
     private void checkReservationAlreadyExist(ReservationDto reservationDTO, Date reservationDateDate) {
         Long time_interval_id = reservationDTO.getTime_interval_id();
         // Comprobar que la pista no está reservada en ese horario

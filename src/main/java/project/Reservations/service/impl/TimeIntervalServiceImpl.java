@@ -54,7 +54,7 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
         Court court = courtRepository.findById(court_id)
                 .orElseThrow(() -> new ResourceNotFoundException("Court", "court_id", court_id));
 
-        if(!timeIntervalIsValid(court_id, timeIntervalDto)) {
+        if (!timeIntervalIsValid(court_id, timeIntervalDto)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time interval is not valid");
         }
 
@@ -88,7 +88,13 @@ public class TimeIntervalServiceImpl implements TimeIntervalService {
 
     /* #################### VALIDATION #################### */
 
-    /* Comprobar si el intervalo de tiempo es válido */
+    /**
+     * Comprueba si el intervalo de tiempo es válido
+     *
+     * @param court_id
+     * @param timeIntervalDto
+     * @return boolean
+     */
     public Boolean timeIntervalIsValid(Long court_id, TimeIntervalDto timeIntervalDto) {
         if ((timeIntervalRepository.existsByCourtCourtIdAndStart_timeAndEnd_time(
                 court_id,
