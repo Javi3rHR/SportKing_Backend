@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"javier\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"javier@gmail.com\"\r\n}\r\n// {\r\n//     \"username\" : \"admin3\",\r\n//     \"password\" : \"1234\",\r\n//     \"email\" : \"admin3@admin.edu\"\r\n// }",
+							"raw": "{\r\n    \"username\" : \"admin3\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"admin3@admin.edu\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,16 +73,6 @@
 				{
 					"name": "All Users",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2Nzk1MDk3LCJleHAiOjE2NjY4MTMwOTd9.5-AFC-mZtfbm3qWg8fxtbXJGWpWwUKDnW0dQ5ACUGxg",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -336,7 +326,92 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Reservations By User ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/users/3/reservations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										"3",
+										"reservations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 28 Oct 2022 09:22:14 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"date\": \"29/10/2022\",\n        \"paid\": null,\n        \"user\": {\n            \"username\": \"admin3\",\n            \"name\": null,\n            \"email\": \"admin3@admin.edu\",\n            \"phone\": null\n        },\n        \"time_interval\": {\n            \"id\": 1,\n            \"start_time\": \"09:00\",\n            \"end_time\": \"10:30\",\n            \"court\": {\n                \"id\": 1,\n                \"name\": \"Fútbol 1\",\n                \"price\": 10,\n                \"sport\": {\n                    \"id\": 1,\n                    \"sport_name\": \"Fútbol\",\n                    \"description\": null,\n                    \"photo\": null\n                }\n            }\n        }\n    },\n    {\n        \"date\": \"27/10/2023\",\n        \"paid\": false,\n        \"user\": {\n            \"username\": \"admin3\",\n            \"name\": null,\n            \"email\": \"admin3@admin.edu\",\n            \"phone\": null\n        },\n        \"time_interval\": {\n            \"id\": 6,\n            \"start_time\": \"12:00\",\n            \"end_time\": \"13:30\",\n            \"court\": {\n                \"id\": 2,\n                \"name\": \"Fútbol 2\",\n                \"price\": 10,\n                \"sport\": {\n                    \"id\": 1,\n                    \"sport_name\": \"Fútbol\",\n                    \"description\": null,\n                    \"photo\": null\n                }\n            }\n        }\n    }\n]"
+						}
+					]
 				},
 				{
 					"name": "Reservations By ID And User ID",
@@ -825,6 +900,46 @@
 				},
 				{
 					"name": "Time Intervals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/courts/2/time_intervals?reservation_date=02/11/2022",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"courts",
+								"2",
+								"time_intervals"
+							],
+							"query": [
+								{
+									"key": "reservation_date",
+									"value": "02/11/2022"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Time Intervals",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -879,7 +994,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2ODgxMzI1LCJleHAiOjE2NjY4OTkzMjV9.1la42k1-IYpfbpOUrqy5kp8odGTY31euyjvdrswxmb4",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJyb2xlcyI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiaWF0IjoxNjY2OTQxNTA5LCJleHAiOjE2NjY5NTk1MDl9.GX_fQM2zL3YEjyM0m5YyWYE6ZkjizPFeiO-w1sbnZHw",
 				"type": "string"
 			}
 		]
