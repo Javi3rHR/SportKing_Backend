@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import project.Reservations.dto.reservation.ReservationDto;
+import project.Reservations.dto.reservation.ReservationResponseAdminDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.service.ReservationService;
 
@@ -25,7 +26,7 @@ public class ReservationController {
     /* #################### GET #################### */
     @GetMapping("/reservations")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ReservationResponseDto>> getAll() {
+    public ResponseEntity<List<ReservationResponseAdminDto>> getAll() {
         return new ResponseEntity<>(reservationService.findAll(), HttpStatus.OK);
     }
 

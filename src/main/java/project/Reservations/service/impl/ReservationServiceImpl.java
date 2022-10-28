@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import project.Reservations.dto.reservation.ReservationDto;
+import project.Reservations.dto.reservation.ReservationResponseAdminDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 import project.Reservations.exception.ResourceNotFoundException;
@@ -46,12 +47,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* Busca todas las reservas */
     @Override
-    public List<ReservationResponseDto> findAll() {
+    public List<ReservationResponseAdminDto> findAll() {
         try {
             List<Reservation> reservations = new ArrayList<>();
             reservationRepository.findAll().iterator().forEachRemaining(reservations::add);
-            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
-            setUserDetailsWithoutUserID(reservationResponse);
+            List<ReservationResponseAdminDto> reservationResponse = reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
             return reservationResponse;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "List of reservations not found.");
@@ -70,9 +70,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationResponseDto> findByUserUserId(Long user_id) {
         try {
             List<Reservation> reservations = reservationRepository.findByUserUserId(user_id);
-            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
-            setUserDetails(user_id, reservationResponse);
-            return reservationResponse;
+            return reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
         } catch (Exception e) {
             throw new ResourceNotFoundException("User", "user_id", user_id);
         }
@@ -81,17 +79,11 @@ public class ReservationServiceImpl implements ReservationService {
     /* Busca una reserva por su id y el id del usuario */
     @Override
     public ReservationResponseDto findByIdAndUserUserId(Long reservation_id, Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
+        userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "user_id", user_id));
         try {
             Reservation reservation = reservationRepository.findByIdAndUserUserId(reservation_id, user_id);
 
-            ReservationResponseDto reservationResponse = mapDTOResponse(reservation);
-            reservationResponse.setUser_id(user.getUser_id());
-            reservationResponse.setUsername(user.getUsername());
-            reservationResponse.setEmail(user.getEmail());
-            reservationResponse.setPhone(user.getPhone());
-
-            return reservationResponse;
+            return mapDTOResponse(reservation);
         } catch (Exception e) {
             throw new ResourceNotFoundException("Reservation", "reservation_id", reservation_id);
         }
@@ -99,11 +91,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     /* Busca las reservas de una pista */
     @Override
-    public List<ReservationResponseDto> findByCourtCourtId(Long court_id) {
+    public List<ReservationResponseAdminDto> findByCourtCourtId(Long court_id) {
         try {
             List<Reservation> reservations = reservationRepository.findByCourtCourtId(court_id);
-            List<ReservationResponseDto> reservationResponse = reservations.stream().map(this::mapDTOResponse).collect(Collectors.toList());
-            setUserDetailsWithoutUserID(reservationResponse);
+            List<ReservationResponseAdminDto> reservationResponse = reservations.stream().map(this::mapDTOResponseAdmin).collect(Collectors.toList());
+//            setUserDetailsWithoutUserID(reservationResponse);
             return reservationResponse;
         } catch (Exception e) {
             throw new ResourceNotFoundException("Court", "court_id", court_id);
@@ -202,6 +194,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+    private ReservationResponseAdminDto mapDTOResponseAdmin(Reservation reservation) {
+        try {
+            return modelMapper.map(reservation, ReservationResponseAdminDto.class);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not mapped.");
+        }
+    }
+
     private ReservationResponseDto mapDTOResponse(Reservation reservation) {
         try {
             return modelMapper.map(reservation, ReservationResponseDto.class);
@@ -227,36 +227,36 @@ public class ReservationServiceImpl implements ReservationService {
     /**
      * Setea los detalles del usuario en cada reserva de la lista para devolverlo en el response
      *
-     * @param user_id
-     * @param reservationResponse
+     * @param user_id id del usuario
+     * @param reservationResponse objeto response de la reserva
      */
-    private void setUserDetails(Long user_id, List<ReservationResponseDto> reservationResponse) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
-        for (ReservationResponseDto r : reservationResponse) {
-            if (r.getUser_id() == user_id) {
-                r.setUsername(user.getUsername());
-                r.setEmail(user.getEmail());
-                r.setPhone(user.getPhone());
-            }
-        }
-    }
+//    private void setUserDetails(Long user_id, List<ReservationResponseAdminDto> reservationResponse) {
+//        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("User", "id", user_id));
+//        for (ReservationResponseAdminDto r : reservationResponse) {
+//            if (r.getUser_id() == user_id) {
+//                r.setUsername(user.getUsername());
+//                r.setEmail(user.getEmail());
+//                r.setPhone(user.getPhone());
+//            }
+//        }
+//    }
 
     /**
      * Insertar los campos de User en ReservationResponse sin pasar user_id
      *
-     * @param reservationResponse
+     * @param reservationResponse objeto response de la reserva
      */
-    private void setUserDetailsWithoutUserID(List<ReservationResponseDto> reservationResponse) {
-        User user;
-        for (ReservationResponseDto r : reservationResponse) {
-            user = userRepository.findById(r.getUser_id()).orElseThrow(() -> new ResourceNotFoundException("User", "id", r.getUser_id()));
-            Long user_id = user.getUser_id();
-            r.setUsername(user.getUsername());
-            r.setEmail(user.getEmail());
-            r.setPhone(user.getPhone());
-            setUserDetails(user_id, reservationResponse);
-        }
-    }
+//    private void setUserDetailsWithoutUserID(List<ReservationResponseAdminDto> reservationResponse) {
+//        User user;
+//        for (ReservationResponseAdminDto r : reservationResponse) {
+//            user = userRepository.findById(r.getUser_id()).orElseThrow(() -> new ResourceNotFoundException("User", "id", r.getUser_id()));
+//            Long user_id = user.getUser_id();
+//            r.setUsername(user.getUsername());
+//            r.setEmail(user.getEmail());
+//            r.setPhone(user.getPhone());
+//            setUserDetails(user_id, reservationResponse);
+//        }
+//    }
 
 
     /* #################### VALIDATIONS #################### */
@@ -264,8 +264,8 @@ public class ReservationServiceImpl implements ReservationService {
     /**
      * Generar fecha con formato correcto para su validaci'on
      *
-     * @param reservation
-     * @param sdf
+     * @param reservation objeto de la reserva
+     * @param sdf objeto de SimpleDateFormat
      * @return Date
      */
     private static Date getDate(Reservation reservation, SimpleDateFormat sdf) {
@@ -291,7 +291,7 @@ public class ReservationServiceImpl implements ReservationService {
     /**
      * Establece el formato para la fecha
      *
-     * @param reservation
+     * @param reservation objeto de la reserva
      * @return SimpleDateFormat
      */
     private static SimpleDateFormat getSimpleDateFormat(Reservation reservation) {
@@ -311,8 +311,8 @@ public class ReservationServiceImpl implements ReservationService {
     /**
      * Comprueba si la reserva ya existe
      *
-     * @param reservationDTO
-     * @param reservationDateDate
+     * @param reservationDTO objeto DTO de la reserva
+     * @param reservationDateDate objeto Date de la reserva
      */
     private void checkReservationAlreadyExist(ReservationDto reservationDTO, Date reservationDateDate) {
         Long time_interval_id = reservationDTO.getTime_interval_id();

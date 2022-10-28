@@ -14,9 +14,9 @@ public class CourtDto {
         private long id;
         @NotNull(message = "Name is required")
         private String name;
+        private double price;
         @NotEmpty(message = "Sport is required")
         private Sport sport;
-        private double price;
 
         public CourtDto() {
             super();

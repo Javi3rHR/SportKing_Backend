@@ -1,6 +1,7 @@
 package project.Reservations.service;
 
 import project.Reservations.dto.reservation.ReservationDto;
+import project.Reservations.dto.reservation.ReservationResponseAdminDto;
 import project.Reservations.dto.reservation.ReservationResponseDto;
 import project.Reservations.entities.Reservation;
 
@@ -9,11 +10,11 @@ import java.util.Optional;
 
 
 public interface ReservationService {
-    List<ReservationResponseDto> findAll();
+    List<ReservationResponseAdminDto> findAll();
 
     List<ReservationResponseDto> findByUserUserId(Long user_id);
 
-    List<ReservationResponseDto> findByCourtCourtId(Long court_id);
+    List<ReservationResponseAdminDto> findByCourtCourtId(Long court_id);
 
     /**
      * Busca una reserva por su id y el id del usuario que la ha hecho
