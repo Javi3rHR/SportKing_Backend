@@ -86,4 +86,5 @@ public class UserAdminController {
         log.info("User " + username + " has been deleted");
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
+
 }

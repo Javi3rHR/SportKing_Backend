@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import project.Security.jwt.TokenProvider;
 import project.Security.jwt.AuthTokenDto;
+import project.Users.dto.LoginResponseDto;
 import project.Users.dto.LoginUser;
 import project.Users.dto.UserDto;
 import project.Users.entities.User;
@@ -47,31 +48,14 @@ public class UserAuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthTokenDto(token));
+        final User user = userService.findByUsername(loginUser.getUsername());
+        final AuthTokenDto authTokenDto = new AuthTokenDto(token);
+        return ResponseEntity.ok(new LoginResponseDto(authTokenDto, user));
     }
 
     @PostMapping("/register")
     public User saveUser(@Valid @RequestBody UserDto user){
         return userService.save(user);
     }
-
-
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/hello-admin")
-//    public String adminPing(){
-//        return "Only Admins Can Read This";
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-//    @GetMapping("/hello-admin-user")
-//    public String adminUser(){
-//        return "Only Admins and Users Can Read This";
-//    }
-//
-//    @PreAuthorize("hasRole('USER')")
-//    @GetMapping("/hello-user")
-//    public String userPing(){
-//        return "Any User Can Read This";
-//    }
 
 }
