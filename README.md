@@ -1,4 +1,4 @@
-[Javier Herreros Rodriguez - Memoria Proyecto DAW.pdf](https://github.com/Javi3rHR/SportKing_Backend/files/11304280/Javier.Herreros.Rodriguez.-.Memoria.Proyecto.DAW.1.pdf)
+[MEMORIA DEL PROYECTO](https://github.com/Javi3rHR/SportKing_Backend/files/11304286/MemoriaProyecto.pdf)
 
 # SportKing_Backend
 
